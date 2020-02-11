@@ -1,6 +1,7 @@
 package pl.firma.projekt.carbase.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="person")
@@ -18,6 +19,15 @@ public class Person {
 
     @Column(name = "email")
     private String email;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+            CascadeType.REFRESH})
+    @JoinTable(
+            name = "person_car",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id")
+    )
+    private List<Car> cars;
 
     public Person() {}
 
@@ -57,6 +67,14 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<Car> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<Car> cars) {
+        this.cars = cars;
     }
 
     @Override
