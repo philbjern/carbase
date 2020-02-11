@@ -21,7 +21,8 @@ public class Car {
     private int productionYear;
 
     @Column(name = "fuel")
-    private String fuel;
+    @Enumerated(EnumType.STRING)
+    private FuelType fuel;
 
     @Column(name = "engine_volume")
     private String engineVolume;
@@ -37,7 +38,7 @@ public class Car {
 
     public Car() {}
 
-    public Car(String make, String model, int productionYear, String fuel, String engineVolume) {
+    public Car(String make, String model, int productionYear, FuelType fuel, String engineVolume) {
         this.make = make;
         this.model = model;
         this.productionYear = productionYear;
@@ -77,11 +78,11 @@ public class Car {
         this.productionYear = productionYear;
     }
 
-    public String getFuel() {
+    public FuelType getFuel() {
         return fuel;
     }
 
-    public void setFuel(String fuel) {
+    public void setFuel(FuelType fuel) {
         this.fuel = fuel;
     }
 
