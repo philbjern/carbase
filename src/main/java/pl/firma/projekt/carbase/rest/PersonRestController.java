@@ -52,6 +52,18 @@ public class PersonRestController {
         return person;
     }
 
+    @PostMapping("/persons/{personId}/cars")
+    public Person addPersonCar(@PathVariable int personId, @RequestBody Car car) {
+        Person person = personService.findById(personId);
+        if (person == null) {
+            throw new RuntimeException("Person id not found " + personId);
+        }
+        car.setId(0);
+        person.addCar(car);
+        personService.save(person);
+        return person;
+    }
+
     @PutMapping("/persons")
     public Person updatePerson(@RequestBody Person person) {
         personService.save(person);

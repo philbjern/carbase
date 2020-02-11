@@ -77,6 +77,11 @@ public class Person {
         this.cars = cars;
     }
 
+    public List<Car> addCar(Car car) {
+        cars.add(car);
+        return cars;
+    }
+
     @Override
     public String toString() {
         return "Person{" +
