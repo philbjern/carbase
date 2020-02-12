@@ -15,7 +15,12 @@ public class JsonParser {
         this.objectMapper = new ObjectMapper();
     }
 
-    public String parsePretty(String response) throws JsonProcessingException {
+    public String stringify(Object obj) throws JsonProcessingException {
+        String jsonString = objectMapper.writeValueAsString(obj);
+        return jsonString;
+    }
+
+    public String stringifyPretty(String response) throws JsonProcessingException {
         Object json = objectMapper.readValue(response, Object.class);
         String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
 
