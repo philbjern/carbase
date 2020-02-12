@@ -58,6 +58,14 @@ public class Person {
         this.cars = cars;
     }
 
+    public void addCar(Car car) {
+        this.cars.add(car);
+    }
+
+    public boolean hasCar(Car car) {
+        return this.cars.contains(car);
+    }
+
     @Override
     public String toString() {
         return "Person{" +
