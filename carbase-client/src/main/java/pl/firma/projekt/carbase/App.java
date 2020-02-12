@@ -1,57 +1,73 @@
 package pl.firma.projekt.carbase;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import pl.firma.projekt.carbase.entity.Person;
+import pl.firma.projekt.carbase.http.HttpConnection;
+import pl.firma.projekt.carbase.json.JsonParser;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.util.List;
+import java.util.Scanner;
 
 public class App {
 
-    private static final String BASE_URL = "http://localhost:8080/api";
+    private static final String API_URL = "http://localhost:8080/api";
+    private static final int LINE_LENGTH = 19;
 
-    public static String request(String urlString, String method) {
-        if (urlString.equals("") || method.equals(""))
-            return "";
-        try {
-            URL url = new URL(urlString);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod(method);
-            connection.setRequestProperty("Content-Type", "application/json");
-            connection.setConnectTimeout(5000);
-            connection.setReadTimeout(5000);
+    public static void printLine(int lineLength, String character) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < lineLength; i++)
+            output.append(character);
+        System.out.println(output.toString());
+    }
 
-            int status = connection.getResponseCode();
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuffer content = new StringBuffer();
-            while ((inputLine = in.readLine()) != null) {
-                content.append(inputLine);
-            }
-            in.close();
-            connection.disconnect();
-            return content.toString();
-
-        } catch (IOException e) {
-            System.out.println("Cannot connect to " + urlString + ", " + e.getMessage());
-        }
-        return "";
+    public static void printMenu() {
+        printLine(LINE_LENGTH, "=");
+        System.out.println("Choose menu option");
+        System.out.println("1. Get persons list");
+        System.out.println("2. Insert URL");
+        System.out.println("q. Quit application");
+        printLine(LINE_LENGTH, "=");
     }
 
     public static void main(String[] args) {
-        String response = request(BASE_URL + "/persons", "GET");
+        HttpConnection connection = new HttpConnection();
 
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            Object json = mapper.readValue(response, Object.class);
-            String jsonPretty = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-            System.out.println(jsonPretty);
-        } catch (JsonProcessingException e) {
-            System.out.println(e);
+        JsonParser parser = new JsonParser();
+
+        Scanner scanner = new Scanner(System.in);
+
+        outer: while (true) {
+            printMenu();
+            String userInput = scanner.nextLine();
+            switch (userInput.charAt(0)) {
+                case '1':
+                    System.out.println("Getting persons list...");
+                    String response = connection.request(API_URL + "/persons", "GET");
+                    try {
+                        System.out.println(parser.parsePretty(response));
+                    } catch (JsonProcessingException e) {
+                        System.out.println(e);
+                    }
+                    break;
+                case '2':
+                    System.out.println("Enter url... " + API_URL + "{your input}");
+                    String userUrl = scanner.nextLine();
+                    response = connection.request(API_URL + userUrl, "GET");
+                    try {
+                        System.out.println(parser.parsePretty(response));
+                    } catch (JsonProcessingException e) {
+                        System.out.println(e);
+                    }
+                    break;
+                case 'q':
+                    System.out.println("Exiting application...");
+                    break outer;
+                default:
+                    System.out.println("Command not recognised, try again");
+                    break;
+            }
         }
+
     }
 
 }
