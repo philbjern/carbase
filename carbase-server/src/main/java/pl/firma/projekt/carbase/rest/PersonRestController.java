@@ -1,6 +1,5 @@
 package pl.firma.projekt.carbase.rest;
 
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,7 +72,7 @@ public class PersonRestController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-    @DeleteMapping("/person/{personId}")
+    @DeleteMapping("/persons/{personId}")
     public ResponseEntity<?> deletePerson(@PathVariable int personId) {
         Person person = personService.findById(personId);
         if (person == null) {
