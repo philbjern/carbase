@@ -1,6 +1,9 @@
 package pl.firma.projekt.carbase.rest;
 
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
@@ -25,59 +28,59 @@ public class PersonRestController {
     }
 
     @GetMapping("/persons/{personId}")
-    public Person getPerson(@PathVariable int personId) {
+    public ResponseEntity<?> getPerson(@PathVariable int personId) {
         Person person = personService.findById(personId);
         if (person == null) {
-            throw new RuntimeException("Person id not found " + personId);
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         }
-        return person;
+        return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
     @GetMapping("/persons/{personId}/cars")
-    public List<Car> getPersonCars(@PathVariable int personId) {
+    public ResponseEntity<?> getPersonCars(@PathVariable int personId) {
         Person person = personService.findById(personId);
         if (person == null) {
-            throw new RuntimeException("Person id not found " + personId);
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         }
         List<Car> cars = person.getCars();
-        return cars;
+        return new ResponseEntity<>(cars, HttpStatus.OK);
     }
 
     @PostMapping("/persons")
-    public Person addPerson(@RequestBody Person person) {
+    public ResponseEntity<?> addPerson(@RequestBody Person person) {
         // also just in case they pass an id in JSON... set id to 0
         // to force a save of new item... instead of update
         person.setId(0);
         personService.save(person);
-        return person;
+        return new ResponseEntity<>(person, HttpStatus.CREATED);
     }
 
     @PostMapping("/persons/{personId}/cars")
-    public Person addPersonCar(@PathVariable int personId, @RequestBody Car car) {
+    public ResponseEntity<?> addPersonCar(@PathVariable int personId, @RequestBody Car car) {
         Person person = personService.findById(personId);
         if (person == null) {
-            throw new RuntimeException("Person id not found " + personId);
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         }
         car.setId(0);
         person.addCar(car);
         personService.save(person);
-        return person;
+        return new ResponseEntity<>(person, HttpStatus.CREATED);
     }
 
     @PutMapping("/persons")
-    public Person updatePerson(@RequestBody Person person) {
+    public ResponseEntity<?> updatePerson(@RequestBody Person person) {
         personService.save(person);
-        return person;
+        return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
     @DeleteMapping("/person/{personId}")
-    public String deletePerson(@PathVariable int personId) {
+    public ResponseEntity<?> deletePerson(@PathVariable int personId) {
         Person person = personService.findById(personId);
         if (person == null) {
-            throw new RuntimeException("Person id not found " + personId);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         personService.deleteById(personId);
-        return "Deleted person id " + personId;
+        return new ResponseEntity<>("Deleted person id " + personId, HttpStatus.OK);
     }
 
 }

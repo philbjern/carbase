@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.firma.projekt.carbase.dao.CarDAO;
 import pl.firma.projekt.carbase.entity.Car;
+import pl.firma.projekt.carbase.entity.Person;
 
 import javax.transaction.Transactional;
 import java.util.List;

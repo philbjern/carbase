@@ -5,9 +5,11 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pl.firma.projekt.carbase.entity.Car;
+import pl.firma.projekt.carbase.entity.Person;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class CarDAOHibernateImpl implements CarDAO {

@@ -3,6 +3,7 @@ package pl.firma.projekt.carbase.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.firma.projekt.carbase.dao.PersonDAO;
+import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
 
 import javax.transaction.Transactional;
