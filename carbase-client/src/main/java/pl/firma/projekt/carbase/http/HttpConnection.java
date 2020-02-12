@@ -14,7 +14,7 @@ public class HttpConnection {
         if (urlString.equals("") || method.equals("")) {
             throw new IllegalArgumentException("URL and request method are required");
         }
-        if (json != null && json.isEmpty() && (method.equalsIgnoreCase("POST") || method.equalsIgnoreCase("PUT"))) {
+        if (json == null && json.isEmpty() && (method.equalsIgnoreCase("POST") || method.equalsIgnoreCase("PUT"))) {
             throw new IllegalArgumentException("Request body is required when using POST or PUT method");
         }
 
