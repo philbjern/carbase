@@ -6,6 +6,7 @@ import pl.firma.projekt.carbase.entity.Person;
 import pl.firma.projekt.carbase.http.HttpConnection;
 import pl.firma.projekt.carbase.json.JsonParser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -13,6 +14,7 @@ public class App {
 
     private static final String API_URL = "http://localhost:8080/api/";
     private static final int LINE_LENGTH = 20;
+
     private HttpConnection connection;
     private JsonParser parser;
     private Scanner scanner;
@@ -31,17 +33,25 @@ public class App {
     }
 
     public void printMenu() {
-        printLine(LINE_LENGTH, "=");
-        System.out.println("Choose menu option");
-        System.out.println("1. Get person list");
-        System.out.println("2. Custom GET request");
-        System.out.println("3. Add person");
-        System.out.println("4. Add car");
-        System.out.println("5. Add existing car to a person");
-        System.out.println("6. Delete person");
-        System.out.println("7. Delete car");
-        System.out.println("q. Quit application");
-        printLine(LINE_LENGTH, "=");
+        List<String> menuEntries = new ArrayList<>();
+        menuEntries.add("Choose menu option");
+        menuEntries.add("1. Get person list");
+        menuEntries.add("2. Get car list");
+        menuEntries.add("3. Add person");
+        menuEntries.add("4. Add car");
+        menuEntries.add("5. Add existing car to a person");
+        menuEntries.add("6. Delete person");
+        menuEntries.add("7. Delete car");
+        menuEntries.add("8. Custom GET request");
+        menuEntries.add("q. Quit application");
+
+        int entryMaxLength = menuEntries.stream()
+                .reduce((s1, s2) -> s1.length() > s2.length() ? s1 : s2).get().length();
+
+        printLine(entryMaxLength, "=");
+        for (String s : menuEntries)
+            System.out.println(s);
+        printLine(entryMaxLength, "=");
     }
 
     public void getPersonList() throws JsonProcessingException {
@@ -66,9 +76,10 @@ public class App {
     public void addPerson() throws JsonProcessingException {
         System.out.println("Insert person's data");
         Person person = new Person();
+        String userInput;
 
         System.out.println("First name: ");
-        String userInput = scanner.nextLine();
+        userInput = scanner.nextLine();
         person.setFirstName(userInput);
 
         System.out.println("Last name: ");
@@ -87,9 +98,10 @@ public class App {
     public void addCar() throws JsonProcessingException {
         System.out.println("Insert car's details");
         Car car = new Car();
+        String userInput;
 
         System.out.println("Make: ");
-        String userInput = scanner.nextLine();
+        userInput = scanner.nextLine();
         car.setMake(userInput);
 
         System.out.println("Model: ");
@@ -239,7 +251,7 @@ public class App {
                     getPersonList();
                     break;
                 case '2':
-                    userCustomGetRequest();
+                    getCarList();
                     break;
                 case '3':
                     addPerson();
@@ -255,6 +267,9 @@ public class App {
                     break;
                 case '7':
                     deleteCar();
+                    break;
+                case '8':
+                    userCustomGetRequest();
                     break;
                 case 'q':
                     System.out.println("Exiting application...");
