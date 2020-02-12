@@ -38,6 +38,8 @@ public class App {
         System.out.println("3. Add person");
         System.out.println("4. Add car");
         System.out.println("5. Add existing car to a person");
+        System.out.println("6. Delete person");
+        System.out.println("7. Delete car");
         System.out.println("q. Quit application");
         printLine(LINE_LENGTH, "=");
     }
@@ -48,8 +50,14 @@ public class App {
         System.out.println(parser.stringifyPretty(response));
     }
 
+    public void getCarList() throws JsonProcessingException {
+        System.out.println("Getting cars list...");
+        String response = connection.request(API_URL + "cars", "GET");
+        System.out.println(parser.stringifyPretty(response));
+    }
+
     public void userCustomGetRequest() throws JsonProcessingException {
-        System.out.println("Enter url... " + API_URL + "{your URL}");
+        System.out.println("Enter url (" + API_URL + "{your input})");
         String userUrl = scanner.nextLine();
         String response = connection.request(API_URL + userUrl, "GET");
         System.out.println(parser.stringifyPretty(response));
@@ -179,6 +187,48 @@ public class App {
         System.out.println(parser.stringifyPretty(response));
     }
 
+    public void deletePerson() throws JsonProcessingException {
+        this.getPersonList();
+        System.out.println("Select person id to remove");
+        String input;
+        int personId;
+
+        while (true) {
+            input = scanner.nextLine();
+            try {
+                personId = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Must provide number");
+            }
+        }
+
+        String url = API_URL + "persons/" + String.valueOf(personId);
+        String response = connection.request(url, "DELETE");
+        System.out.println(response);
+    }
+
+    public void deleteCar() throws JsonProcessingException {
+        this.getCarList();
+        System.out.println("Select car id to remove");
+        String input;
+        int carId;
+
+        while (true) {
+            input = scanner.nextLine();
+            try {
+                carId = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("Must provide number");
+            }
+        }
+
+        String url = API_URL + "cars/" + String.valueOf(carId);
+        String response = connection.request(url, "DELETE");
+        System.out.println(response);
+    }
+
     public void run() throws JsonProcessingException {
         outer:
         while (true) {
@@ -199,6 +249,12 @@ public class App {
                     break;
                 case '5':
                     addExistingCarToPerson();
+                    break;
+                case '6':
+                    deletePerson();
+                    break;
+                case '7':
+                    deleteCar();
                     break;
                 case 'q':
                     System.out.println("Exiting application...");
