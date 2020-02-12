@@ -3,10 +3,7 @@ package pl.firma.projekt.carbase.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
 import pl.firma.projekt.carbase.service.CarService;
@@ -58,4 +55,26 @@ public class CarRestController {
         return new ResponseEntity<>(owners, HttpStatus.OK);
     }
 
+    @PostMapping("/cars")
+    public ResponseEntity<?> addCar(@RequestBody Car car) {
+        car.setId(0);
+        carService.save(car);
+        return new ResponseEntity<>(car, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/cars")
+    public ResponseEntity<?> updatePerson(@RequestBody Car car) {
+        carService.save(car);
+        return new ResponseEntity<>(car, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/cars/{carId}")
+    public ResponseEntity<?> deletePerson(@PathVariable int carId) {
+        Car car = carService.findById(carId);
+        if (car == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        carService.deleteById(carId);
+        return new ResponseEntity<>("Deleted car id " + carId, HttpStatus.OK);
+    }
 }
