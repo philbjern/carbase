@@ -16,29 +16,49 @@ public class JsonParser {
         this.objectMapper = new ObjectMapper();
     }
 
-    public String stringify(Object obj) throws JsonProcessingException {
-        String jsonString = objectMapper.writeValueAsString(obj);
-        return jsonString;
+    public String stringify(Object obj) {
+        try {
+            String jsonString = objectMapper.writeValueAsString(obj);
+            return jsonString;
+        } catch (JsonProcessingException e) {
+            return obj.toString();
+        }
     }
 
-    public String stringifyPretty(String response) throws JsonProcessingException {
-        Object json = objectMapper.readValue(response, Object.class);
-        String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-        return jsonPretty;
+    public String stringifyPretty(String response) {
+        try {
+            Object json = objectMapper.readValue(response, Object.class);
+            String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
+            return jsonPretty;
+        } catch (JsonProcessingException e) {
+            return response;
+        }
     }
 
-    public String stringifyPretty(Object obj) throws JsonProcessingException {
-        String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
-        return jsonPretty;
+    public String stringifyPretty(Object obj) {
+        try {
+            String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+            return jsonPretty;
+        } catch (JsonProcessingException e) {
+            return obj.toString();
+        }
     }
 
-    public List<Person> getPersonList(String jsonString) throws JsonProcessingException {
-        List<Person> result = objectMapper.readValue(jsonString, new TypeReference<List<Person>>() {});
-        return result;
+    public List<Person> getPersonList(String jsonString) {
+        try {
+            List<Person> result = objectMapper.readValue(jsonString, new TypeReference<List<Person>>() {});
+            return result;
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 
-    public List<Car> getCarList(String jsonString) throws JsonProcessingException {
-        List<Car> result = objectMapper.readValue(jsonString, new TypeReference<List<Car>>() {});
-        return result;
+    public List<Car> getCarList(String jsonString) {
+        try {
+            List<Car> result = objectMapper.readValue(jsonString, new TypeReference<List<Car>>() {});
+            return result;
+        } catch (JsonProcessingException e) {
+            return null;
+        }
     }
 }

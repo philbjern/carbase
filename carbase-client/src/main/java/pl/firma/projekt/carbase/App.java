@@ -1,6 +1,5 @@
 package pl.firma.projekt.carbase;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
 import pl.firma.projekt.carbase.http.HttpConnection;
@@ -8,12 +7,12 @@ import pl.firma.projekt.carbase.json.JsonParser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class App {
 
     private static final String API_URL = "http://localhost:8080/api/";
-    private static final int LINE_LENGTH = 20;
 
     private HttpConnection connection;
     private JsonParser parser;
@@ -45,8 +44,9 @@ public class App {
         menuEntries.add("8. Custom GET request");
         menuEntries.add("q. Quit application");
 
-        int entryMaxLength = menuEntries.stream()
-                .reduce((s1, s2) -> s1.length() > s2.length() ? s1 : s2).get().length();
+        Optional<String> item = menuEntries.stream()
+                .reduce((s1, s2) -> s1.length() > s2.length() ? s1 : s2);
+        int entryMaxLength = item.isPresent() ? item.get().length() : 20;
 
         printLine(entryMaxLength, "=");
         for (String s : menuEntries)
@@ -54,26 +54,26 @@ public class App {
         printLine(entryMaxLength, "=");
     }
 
-    public void getPersonList() throws JsonProcessingException {
+    public void getPersonList() {
         System.out.println("Getting persons list...");
         String response = connection.request(API_URL + "persons", "GET");
         System.out.println(parser.stringifyPretty(response));
     }
 
-    public void getCarList() throws JsonProcessingException {
+    public void getCarList() {
         System.out.println("Getting cars list...");
         String response = connection.request(API_URL + "cars", "GET");
         System.out.println(parser.stringifyPretty(response));
     }
 
-    public void userCustomGetRequest() throws JsonProcessingException {
+    public void userCustomGetRequest() {
         System.out.println("Enter url (" + API_URL + "{your input})");
         String userUrl = scanner.nextLine();
         String response = connection.request(API_URL + userUrl, "GET");
         System.out.println(parser.stringifyPretty(response));
     }
 
-    public void addPerson() throws JsonProcessingException {
+    public void addPerson() {
         System.out.println("Insert person's data");
         Person person = new Person();
         String userInput;
@@ -95,7 +95,7 @@ public class App {
         System.out.println(parser.stringifyPretty(response));
     }
 
-    public void addCar() throws JsonProcessingException {
+    public void addCar() {
         System.out.println("Insert car's details");
         Car car = new Car();
         String userInput;
@@ -132,7 +132,7 @@ public class App {
         System.out.println(parser.stringifyPretty(response));
     }
 
-    public void addExistingCarToPerson() throws JsonProcessingException {
+    public void addExistingCarToPerson() {
         Car car;
         Person person;
         String response, userInput;
@@ -199,7 +199,7 @@ public class App {
         System.out.println(parser.stringifyPretty(response));
     }
 
-    public void deletePerson() throws JsonProcessingException {
+    public void deletePerson() {
         this.getPersonList();
         System.out.println("Select person id to remove");
         String input;
@@ -220,7 +220,7 @@ public class App {
         System.out.println(response);
     }
 
-    public void deleteCar() throws JsonProcessingException {
+    public void deleteCar() {
         this.getCarList();
         System.out.println("Select car id to remove");
         String input;
@@ -241,7 +241,7 @@ public class App {
         System.out.println(response);
     }
 
-    public void run() throws JsonProcessingException {
+    public void run() {
         outer:
         while (true) {
             printMenu();
@@ -281,7 +281,7 @@ public class App {
         }
     }
 
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) {
         App app = new App();
         app.run();
     }
