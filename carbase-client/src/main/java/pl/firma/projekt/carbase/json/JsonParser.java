@@ -3,11 +3,13 @@ package pl.firma.projekt.carbase.json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
 
 import java.util.List;
 
+@Component
 public class JsonParser {
 
     private ObjectMapper objectMapper;
@@ -18,8 +20,7 @@ public class JsonParser {
 
     public String stringify(Object obj) {
         try {
-            String jsonString = objectMapper.writeValueAsString(obj);
-            return jsonString;
+            return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             return obj.toString();
         }
@@ -28,8 +29,7 @@ public class JsonParser {
     public String stringifyPretty(String response) {
         try {
             Object json = objectMapper.readValue(response, Object.class);
-            String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
-            return jsonPretty;
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(json);
         } catch (JsonProcessingException e) {
             return response;
         }
@@ -37,8 +37,7 @@ public class JsonParser {
 
     public String stringifyPretty(Object obj) {
         try {
-            String jsonPretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
-            return jsonPretty;
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
             return obj.toString();
         }
@@ -46,8 +45,7 @@ public class JsonParser {
 
     public List<Person> getPersonList(String jsonString) {
         try {
-            List<Person> result = objectMapper.readValue(jsonString, new TypeReference<List<Person>>() {});
-            return result;
+            return objectMapper.readValue(jsonString, new TypeReference<List<Person>>() {});
         } catch (JsonProcessingException e) {
             return null;
         }
@@ -55,8 +53,7 @@ public class JsonParser {
 
     public List<Car> getCarList(String jsonString) {
         try {
-            List<Car> result = objectMapper.readValue(jsonString, new TypeReference<List<Car>>() {});
-            return result;
+            return objectMapper.readValue(jsonString, new TypeReference<List<Car>>() {});
         } catch (JsonProcessingException e) {
             return null;
         }

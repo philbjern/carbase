@@ -1,5 +1,8 @@
 package pl.firma.projekt.carbase;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
 import pl.firma.projekt.carbase.http.HttpConnection;
@@ -10,18 +13,21 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
-public class App {
+@Component
+public class ApplicationMenu {
 
-    private static final String API_URL = "http://localhost:8080/api/";
+    @Autowired
+    HttpConnection connection;
+    @Autowired
+    JsonParser parser;
 
-    private HttpConnection connection;
-    private JsonParser parser;
+    @Value("${api.url}")
+    private String baseUrl;
+
     private Scanner scanner;
 
-    public App() {
-        connection = new HttpConnection();
-        parser = new JsonParser();
-        scanner = new Scanner(System.in);
+    public ApplicationMenu() {
+        this.scanner =  new Scanner(System.in);
     }
 
     public void printLine(int lineLength, String character) {
@@ -46,7 +52,7 @@ public class App {
 
         Optional<String> item = menuEntries.stream()
                 .reduce((s1, s2) -> s1.length() > s2.length() ? s1 : s2);
-        int entryMaxLength = item.isPresent() ? item.get().length() : 20;
+        int entryMaxLength = item.map(String::length).orElse(20);
 
         printLine(entryMaxLength, "=");
         for (String s : menuEntries)
@@ -56,20 +62,20 @@ public class App {
 
     public void getPersonList() {
         System.out.println("Getting persons list...");
-        String response = connection.request(API_URL + "persons", "GET");
+        String response = connection.request(baseUrl + "persons", "GET");
         System.out.println(parser.stringifyPretty(response));
     }
 
     public void getCarList() {
         System.out.println("Getting cars list...");
-        String response = connection.request(API_URL + "cars", "GET");
+        String response = connection.request(baseUrl + "cars", "GET");
         System.out.println(parser.stringifyPretty(response));
     }
 
     public void userCustomGetRequest() {
-        System.out.println("Enter url (" + API_URL + "{your input})");
+        System.out.println("Enter url (" + baseUrl + "{your input})");
         String userUrl = scanner.nextLine();
-        String response = connection.request(API_URL + userUrl, "GET");
+        String response = connection.request(baseUrl + userUrl, "GET");
         System.out.println(parser.stringifyPretty(response));
     }
 
@@ -90,7 +96,7 @@ public class App {
         userInput = scanner.nextLine();
         person.setEmail(userInput);
 
-        String url = API_URL + "persons";
+        String url = baseUrl + "persons";
         String response = connection.request(url, "POST", parser.stringify(person));
         System.out.println(parser.stringifyPretty(response));
     }
@@ -127,7 +133,7 @@ public class App {
         userInput = scanner.nextLine();
         car.setEngineVolume(userInput);
 
-        String url = API_URL + "cars";
+        String url = baseUrl + "cars";
         String response = connection.request(url, "POST", parser.stringify(car));
         System.out.println(parser.stringifyPretty(response));
     }
@@ -140,7 +146,7 @@ public class App {
 
         while (true) {
             System.out.println("Choose person id");
-            response = connection.request(API_URL + "persons", "GET");
+            response = connection.request(baseUrl + "persons", "GET");
             System.out.println(parser.stringifyPretty(response));
 
             while (true) {
@@ -169,7 +175,7 @@ public class App {
 
         while (true) {
             System.out.println("Choose car id");
-            response = connection.request(API_URL + "cars", "GET");
+            response = connection.request(baseUrl + "cars", "GET");
             System.out.println(parser.stringifyPretty(response));
             while (true) {
                 userInput = scanner.nextLine();
@@ -195,7 +201,7 @@ public class App {
         }
 
         person.addCar(car);
-        response = connection.request(API_URL + "persons", "PUT", parser.stringify(person));
+        response = connection.request(baseUrl + "persons", "PUT", parser.stringify(person));
         System.out.println(parser.stringifyPretty(response));
     }
 
@@ -215,7 +221,7 @@ public class App {
             }
         }
 
-        String url = API_URL + "persons/" + String.valueOf(personId);
+        String url = baseUrl + "persons/" + String.valueOf(personId);
         String response = connection.request(url, "DELETE");
         System.out.println(response);
     }
@@ -236,7 +242,7 @@ public class App {
             }
         }
 
-        String url = API_URL + "cars/" + String.valueOf(carId);
+        String url = baseUrl + "cars/" + String.valueOf(carId);
         String response = connection.request(url, "DELETE");
         System.out.println(response);
     }
@@ -282,7 +288,7 @@ public class App {
     }
 
     public static void main(String[] args) {
-        App app = new App();
+        ApplicationMenu app = new ApplicationMenu();
         app.run();
     }
 
