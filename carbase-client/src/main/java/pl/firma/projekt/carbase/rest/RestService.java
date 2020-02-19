@@ -29,6 +29,10 @@ public class RestService {
                 .build();
     }
 
+    public String getApiUrl() {
+        return this.apiUrl;
+    }
+
     public void setupHeaders() {
         // create headers
         headers = new HttpHeaders();
