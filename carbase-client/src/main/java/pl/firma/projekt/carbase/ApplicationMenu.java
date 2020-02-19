@@ -15,27 +15,21 @@ import java.util.stream.Collectors;
 @Component
 public class ApplicationMenu {
 
-    @Autowired
-    JsonParser parser;
+    private static final String MENU_LINE_CHAR = "=";
 
     @Autowired
     RestService restService;
 
+    @Autowired
+    JsonParser parser;
+
     private Scanner scanner;
     private List<String> menuEntries;
     private int lineLength;
-    private static final String MENU_CHAR = "=";
 
     public ApplicationMenu() {
         this.scanner = new Scanner(System.in);
         this.init();
-    }
-
-    public void printLine(int lineLength, String character) {
-        StringBuilder output = new StringBuilder();
-        for (int i = 0; i < lineLength; i++)
-            output.append(character);
-        System.out.println(output.toString());
     }
 
     public void init() {
@@ -58,11 +52,18 @@ public class ApplicationMenu {
                 .orElse(20);
     }
 
+    public void printLine(int lineLength, String character) {
+        StringBuilder output = new StringBuilder();
+        for (int i = 0; i < lineLength; i++)
+            output.append(character);
+        System.out.println(output.toString());
+    }
+
     public void printMenu() {
-        printLine(this.lineLength, MENU_CHAR);
+        printLine(this.lineLength, MENU_LINE_CHAR);
         for (String s : menuEntries)
             System.out.println(s);
-        printLine(this.lineLength, MENU_CHAR);
+        printLine(this.lineLength, MENU_LINE_CHAR);
     }
 
     public void printPersonList() {
