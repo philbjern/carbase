@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 @Component
 public class ApplicationMenu {
@@ -49,9 +50,10 @@ public class ApplicationMenu {
         menuEntries.add("3. Add person");
         menuEntries.add("4. Add car");
         menuEntries.add("5. Add existing car to a person");
-        menuEntries.add("6. Delete person");
-        menuEntries.add("7. Delete car");
-        menuEntries.add("8. Custom GET request");
+        menuEntries.add("6. Remove car from a person");
+        menuEntries.add("7. Delete person");
+        menuEntries.add("8. Delete car");
+        menuEntries.add("9. Custom GET request");
         menuEntries.add("q. Quit application");
 
         Optional<String> item = menuEntries.stream()
@@ -66,26 +68,21 @@ public class ApplicationMenu {
 
     public void printPersonList() {
         System.out.println("Getting persons list...");
-//        String response = connection.request(baseUrl + "persons", "GET");
-//        System.out.println(parser.stringifyPretty(response));
-        String response = parser.stringifyPretty(restService.getAllPersons());
-        System.out.println(response);
+        String response = restService.getAllPersons();
+        parser.printPretty(response);
     }
 
     public void getCarList() {
         System.out.println("Getting cars list...");
-//        String response = connection.request(baseUrl + "cars", "GET");
-//        System.out.println(parser.stringifyPretty(response));
-
-        String response = parser.stringifyPretty(restService.getAllCars());
-        System.out.println(response);
+        String response = restService.getAllCars();
+        parser.printPretty(response);
     }
 
     public void userCustomGetRequest() {
         System.out.println("Enter url (" + baseUrl + "{your input})");
         String userUrl = scanner.nextLine();
         String response = connection.request(baseUrl + userUrl, "GET");
-        System.out.println(parser.stringifyPretty(response));
+        parser.printPretty(response);
     }
 
     public void addPerson() {
@@ -114,10 +111,8 @@ public class ApplicationMenu {
         }
         person.setEmail(userInput);
 
-//        String url = baseUrl + "persons";
-//        String response = connection.request(url, "POST", parser.stringify(person));
-//        System.out.println(parser.stringifyPretty(response));
-        System.out.println(restService.addPerson(person));
+        String response = restService.addPerson(person);
+        parser.printPretty(response);
     }
 
     public void addCar() {
@@ -167,21 +162,19 @@ public class ApplicationMenu {
         }
         car.setEngineVolume(userInput);
 
-        String url = baseUrl + "cars";
-        String response = connection.request(url, "POST", parser.stringify(car));
-        System.out.println(parser.stringifyPretty(response));
+        String response = restService.addCar(car);
+        parser.printPretty(response);
     }
 
     public void addExistingCarToPerson() {
-        Car car;
         Person person;
-        String response, userInput;
+        Car car;
+        String userInput;
         int personId, carId;
 
         while (true) {
             System.out.println("Choose person id");
-            response = connection.request(baseUrl + "persons", "GET");
-            System.out.println(parser.stringifyPretty(response));
+            parser.printPretty(restService.getAllPersons());
 
             while (true) {
                 userInput = scanner.nextLine();
@@ -193,12 +186,7 @@ public class ApplicationMenu {
                 }
             }
 
-            List<Person> personList = parser.getPersonList(response);
-            int finalPersonId = personId;
-            person = personList.stream().filter((Person p) -> {
-                return p.getId() == finalPersonId;
-            }).findAny().orElse(null);
-
+            person = parser.getPerson(restService.getPerson(personId));
             if (person == null) {
                 System.out.println("Choose existing person's id");
             } else {
@@ -208,8 +196,7 @@ public class ApplicationMenu {
 
         while (true) {
             System.out.println("Choose car id");
-            response = connection.request(baseUrl + "cars", "GET");
-            System.out.println(parser.stringifyPretty(response));
+            parser.printPretty(restService.getAllCars());
             while (true) {
                 userInput = scanner.nextLine();
                 try {
@@ -220,11 +207,7 @@ public class ApplicationMenu {
                 }
             }
 
-            int finalCarId = carId;
-            car = parser.getCarList(response).stream().filter((Car c) -> {
-                return c.getId() == finalCarId;
-            }).findAny().orElse(null);
-
+            car = parser.getCar(restService.getCar(carId));
             if (car == null) {
                 System.out.println("Choose existing car's id");
             } else {
@@ -233,8 +216,75 @@ public class ApplicationMenu {
         }
 
         person.addCar(car);
-        response = connection.request(baseUrl + "persons", "PUT", parser.stringify(person));
-        System.out.println(parser.stringifyPretty(response));
+        String response = restService.updatePerson(person);
+        parser.printPretty(response);
+    }
+
+    public void removeCarFromPerson() {
+        Person person;
+        Car car;
+        String userInput;
+        int personId, carId;
+
+        while (true) {
+            parser.printPretty(restService.getAllPersons());
+            System.out.println("Choose person id (q to quit)");
+            while (true) {
+                userInput = scanner.nextLine();
+                if (userInput.charAt(0) == 'q')
+                    return;
+                try {
+                    personId = Integer.parseInt(userInput);
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("Person's id must be a number");
+                }
+            }
+            person = parser.getPerson(restService.getPerson(personId));
+            if (person == null) {
+                System.out.println("Choose existing person's id");
+            } else {
+                break;
+            }
+        }
+
+        List<Car> cars = person.getCars();
+        List<Integer> availableIds = new ArrayList<>();
+        if (!cars.isEmpty()) {
+            for (Car c : cars) {
+                availableIds.add(c.getId());
+            }
+            String idList = availableIds.stream().map(String::valueOf).collect(Collectors.joining(", "));
+            while (true) {
+                parser.printCars(cars);
+                System.out.println("Choose car id to remove (" + idList + ")");
+                while (true) {
+                    userInput = scanner.nextLine();
+                    if (userInput.charAt(0) == 'q')
+                        return;
+                    try {
+                        carId = Integer.parseInt(userInput);
+                        break;
+                    } catch (NumberFormatException e) {
+                        System.out.println("Car's id must be a number");
+                    }
+                }
+
+                car = parser.getCar(restService.getCar(carId));
+                if (car == null) {
+                    System.out.println("Choose existing car's id");
+                } else {
+                    break;
+                }
+            }
+
+            person.removeCar(car);
+            String response = restService.updatePerson(person);
+            parser.printPretty(response);
+
+        } else {
+            System.out.println("No cars to remove");
+        }
     }
 
     public void deletePerson() {
@@ -301,12 +351,15 @@ public class ApplicationMenu {
                     addExistingCarToPerson();
                     break;
                 case '6':
-                    deletePerson();
+                    removeCarFromPerson();
                     break;
                 case '7':
-                    deleteCar();
+                    deletePerson();
                     break;
                 case '8':
+                    deleteCar();
+                    break;
+                case '9':
                     userCustomGetRequest();
                     break;
                 case 'q':
