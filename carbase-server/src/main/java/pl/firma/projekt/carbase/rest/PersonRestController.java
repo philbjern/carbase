@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class PersonRestController {
-
     private PersonService personService;
 
     @Autowired

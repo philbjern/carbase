@@ -1,7 +1,7 @@
 package pl.firma.projekt.carbase.entity;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Car {
@@ -26,15 +26,6 @@ public class Car {
 
     @Column(name = "engine_volume")
     private String engineVolume;
-
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-//            CascadeType.REFRESH})
-//    @JoinTable(
-//            name = "person_car",
-//            joinColumns = @JoinColumn(name = "car_id"),
-//            inverseJoinColumns = @JoinColumn(name = "person_id")
-//    )
-//    private List<Person> persons;
 
     public Car() {}
 
@@ -94,14 +85,6 @@ public class Car {
         this.engineVolume = engineVolume;
     }
 
-//    public List<Person> getPersons() {
-//        return persons;
-//    }
-//
-//    public void setPersons(List<Person> persons) {
-//        this.persons = persons;
-//    }
-
     @Override
     public String toString() {
         return "Car{" +
@@ -112,6 +95,24 @@ public class Car {
                 ", fuel='" + fuel + '\'' +
                 ", engineVolume='" + engineVolume + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return id == car.id &&
+                productionYear == car.productionYear &&
+                Objects.equals(make, car.make) &&
+                Objects.equals(model, car.model) &&
+                fuel == car.fuel &&
+                Objects.equals(engineVolume, car.engineVolume);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, make, model, productionYear, fuel, engineVolume);
     }
 
 }

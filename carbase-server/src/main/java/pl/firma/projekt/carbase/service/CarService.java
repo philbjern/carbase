@@ -1,15 +1,40 @@
 package pl.firma.projekt.carbase.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import pl.firma.projekt.carbase.entity.Car;
+import pl.firma.projekt.carbase.repository.CarRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public interface CarService {
-    public List<Car> findAll();
+@Service
+public class CarService {
 
-    public Car findById(int id);
+    @Autowired
+    CarRepository carRepository;
 
-    public void save(Car car);
+    public List<Car> findAll() {
+        List<Car> carList = new ArrayList<>();
+        carRepository.findAll()
+                .forEach(carList::add);
+        return carList;
+    }
 
-    public void deleteById(int id);
+    public Car findById(Integer carId) {
+        return carRepository.findById(carId).orElse(null);
+    }
+
+    public void save(Car car) {
+        carRepository.save(car);
+    }
+
+    public void delete(Car car) {
+        carRepository.delete(car);
+    }
+
+    public void deleteById(Integer carId) {
+        carRepository.deleteById(carId);
+    }
+
 }
