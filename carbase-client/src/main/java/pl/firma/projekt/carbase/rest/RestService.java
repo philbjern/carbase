@@ -93,13 +93,16 @@ public class RestService {
         HttpEntity<Person> entity = new HttpEntity<>(person, this.headers);
         // send POST request
         // ResponseEntity<Person> response = this.restTemplate.postForEntity(url, entity, Person.class);
-        ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
-
-        // check response status code
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            return response.getBody();
-        } else {
-            return null;
+        try {
+            ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
+            // check response status code
+            if (response.getStatusCode() == HttpStatus.CREATED) {
+                return response.getBody();
+            } else {
+                return null;
+            }
+        } catch (RestClientException e) {
+            return "Error adding person, " + e.getMessage();
         }
     }
 
@@ -109,13 +112,16 @@ public class RestService {
         HttpEntity<Car> entity = new HttpEntity<>(car, this.headers);
         // send POST request
         // ResponseEntity<Person> response = this.restTemplate.postForEntity(url, entity, Person.class);
-        ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
-
-        // check response status code
-        if (response.getStatusCode() == HttpStatus.CREATED) {
-            return response.getBody();
-        } else {
-            return null;
+        try {
+            ResponseEntity<String> response = this.restTemplate.postForEntity(url, entity, String.class);
+            // check response status code
+            if (response.getStatusCode() == HttpStatus.CREATED) {
+                return response.getBody();
+            } else {
+                return null;
+            }
+        } catch (RestClientException e) {
+            return "Error adding car, " + e.getMessage();
         }
     }
 
@@ -123,12 +129,16 @@ public class RestService {
         String url = apiUrl + "/persons";
         HttpEntity<Person> entity = new HttpEntity<>(person, this.headers);
         // send PUT request to update person
-        ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
-
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody();
-        } else {
-            return null;
+        try {
+            ResponseEntity<String> response = this.restTemplate.exchange(url, HttpMethod.PUT, entity, String.class);
+            // check response status code
+            if (response.getStatusCode() == HttpStatus.OK) {
+                return response.getBody();
+            } else {
+                return null;
+            }
+        } catch (RestClientException e) {
+            return "Error updating person " + person.getId() + ", " + e.getMessage();
         }
     }
 
