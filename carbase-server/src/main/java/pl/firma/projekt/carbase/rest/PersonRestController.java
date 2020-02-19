@@ -76,7 +76,7 @@ public class PersonRestController {
     public ResponseEntity<?> deletePerson(@PathVariable int personId) {
         Person person = personService.findById(personId);
         if (person == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         }
         personService.deleteById(personId);
         return new ResponseEntity<>("Deleted person id " + personId, HttpStatus.OK);

@@ -72,7 +72,7 @@ public class CarRestController {
     public ResponseEntity<?> deletePerson(@PathVariable int carId) {
         Car car = carService.findById(carId);
         if (car == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Car not found", HttpStatus.NOT_FOUND);
         }
         carService.deleteById(carId);
         return new ResponseEntity<>("Deleted car id " + carId, HttpStatus.OK);
