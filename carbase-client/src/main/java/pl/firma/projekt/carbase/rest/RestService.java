@@ -74,6 +74,15 @@ public class RestService {
         }
     }
 
+    public String customGetRequest(String url) {
+        try {
+            ResponseEntity<String> response = this.restTemplate.getForEntity(url, String.class);
+            return response.getBody();
+        } catch (RestClientException e) {
+            return "Error requesting " + url + ", " + e.getMessage();
+        }
+    }
+
     public String addPerson(Person person) {
         String url = apiUrl + "/persons";
         // build the request
@@ -118,4 +127,27 @@ public class RestService {
             return null;
         }
     }
+
+    public String deletePerson(Integer personId) {
+        String url = apiUrl + "/persons/" + personId.toString();
+        // send DELETE request to delete person with given id
+        try {
+            this.restTemplate.delete(url);
+            return "Deleted person id " + personId.toString();
+        } catch (RestClientException e) {
+            return "Error deleting person, " + e.getMessage();
+        }
+    }
+
+    public String deleteCar(Integer carId) {
+        String url = apiUrl + "/cars/" + carId.toString();
+        // send DELETE request to delete person with given id
+        try {
+            this.restTemplate.delete(url);
+            return "Deleted car id " + carId.toString();
+        } catch (RestClientException e) {
+            return "Error deleting car, " + e.getMessage();
+        }
+    }
+
 }
