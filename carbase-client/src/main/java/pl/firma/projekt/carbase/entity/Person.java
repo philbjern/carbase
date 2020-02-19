@@ -1,6 +1,7 @@
 package pl.firma.projekt.carbase.entity;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Person {
 
@@ -66,6 +67,10 @@ public class Person {
         return this.cars.contains(car);
     }
 
+    public void removeCar(Car car) {
+        this.cars.remove(car);
+    }
+
     @Override
     public String toString() {
         return "Person{" +
@@ -75,5 +80,22 @@ public class Person {
                 ", email='" + email + '\'' +
                 ", cars=" + cars +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return id == person.id &&
+                Objects.equals(firstName, person.firstName) &&
+                Objects.equals(lastName, person.lastName) &&
+                Objects.equals(email, person.email) &&
+                Objects.equals(cars, person.cars);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, cars);
     }
 }

@@ -1,5 +1,7 @@
 package pl.firma.projekt.carbase.entity;
 
+import java.util.Objects;
+
 public class Car {
 
     private int id;
@@ -77,5 +79,23 @@ public class Car {
                 ", fuel='" + fuel + '\'' +
                 ", engineVolume='" + engineVolume + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return id == car.id &&
+                productionYear == car.productionYear &&
+                Objects.equals(make, car.make) &&
+                Objects.equals(model, car.model) &&
+                Objects.equals(fuel, car.fuel) &&
+                Objects.equals(engineVolume, car.engineVolume);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, make, model, productionYear, fuel, engineVolume);
     }
 }
