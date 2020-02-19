@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 public class CarRestController {
 
     private CarService carService;
-
     private PersonService personService;
 
     @Autowired
@@ -46,9 +45,11 @@ public class CarRestController {
         if (car == null) {
             return new ResponseEntity<>("Car not found", HttpStatus.NOT_FOUND);
         }
-        List<Person> owners = personService.findAll().stream().filter((Person p) -> {
-            return p.getCars().contains(car);
-        }).collect(Collectors.toList());
+        List<Person> owners = personService.findAll()
+                .stream()
+                .filter((Person p) -> p.getCars().contains(car))
+                .collect(Collectors.toList());
+
         if (owners.isEmpty()) {
             return new ResponseEntity<>("Owners not found", HttpStatus.NOT_FOUND);
         }
@@ -63,16 +64,16 @@ public class CarRestController {
     }
 
     @PutMapping("/cars")
-    public ResponseEntity<?> updatePerson(@RequestBody Car car) {
+    public ResponseEntity<?> updateCar(@RequestBody Car car) {
         carService.save(car);
         return new ResponseEntity<>(car, HttpStatus.OK);
     }
 
     @DeleteMapping("/cars/{carId}")
-    public ResponseEntity<?> deletePerson(@PathVariable int carId) {
+    public ResponseEntity<?> deleteCar(@PathVariable int carId) {
         Car car = carService.findById(carId);
         if (car == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Car id not found", HttpStatus.NOT_FOUND);
         }
         carService.deleteById(carId);
         return new ResponseEntity<>("Deleted car id " + carId, HttpStatus.OK);
