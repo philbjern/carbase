@@ -7,6 +7,7 @@ import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
 import pl.firma.projekt.carbase.http.HttpConnection;
 import pl.firma.projekt.carbase.json.JsonParser;
+import pl.firma.projekt.carbase.rest.RestService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,9 @@ public class ApplicationMenu {
     HttpConnection connection;
     @Autowired
     JsonParser parser;
+
+    @Autowired
+    RestService restService;
 
     @Value("${api.url}")
     private String baseUrl;
@@ -60,16 +64,21 @@ public class ApplicationMenu {
         printLine(entryMaxLength, "=");
     }
 
-    public void getPersonList() {
+    public void printPersonList() {
         System.out.println("Getting persons list...");
-        String response = connection.request(baseUrl + "persons", "GET");
-        System.out.println(parser.stringifyPretty(response));
+//        String response = connection.request(baseUrl + "persons", "GET");
+//        System.out.println(parser.stringifyPretty(response));
+        String response = parser.stringifyPretty(restService.getAllPersons());
+        System.out.println(response);
     }
 
     public void getCarList() {
         System.out.println("Getting cars list...");
-        String response = connection.request(baseUrl + "cars", "GET");
-        System.out.println(parser.stringifyPretty(response));
+//        String response = connection.request(baseUrl + "cars", "GET");
+//        System.out.println(parser.stringifyPretty(response));
+
+        String response = parser.stringifyPretty(restService.getAllCars());
+        System.out.println(response);
     }
 
     public void userCustomGetRequest() {
@@ -80,57 +89,82 @@ public class ApplicationMenu {
     }
 
     public void addPerson() {
-        System.out.println("Insert person's data");
+        System.out.println("Insert person's data (q to quit)");
         Person person = new Person();
         String userInput;
 
         System.out.println("First name: ");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         person.setFirstName(userInput);
 
         System.out.println("Last name: ");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         person.setLastName(userInput);
 
         System.out.println("Email: ");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         person.setEmail(userInput);
 
-        String url = baseUrl + "persons";
-        String response = connection.request(url, "POST", parser.stringify(person));
-        System.out.println(parser.stringifyPretty(response));
+//        String url = baseUrl + "persons";
+//        String response = connection.request(url, "POST", parser.stringify(person));
+//        System.out.println(parser.stringifyPretty(response));
+        System.out.println(restService.addPerson(person));
     }
 
     public void addCar() {
-        System.out.println("Insert car's details");
+        System.out.println("Insert car's details (q to quit)");
         Car car = new Car();
         String userInput;
 
         System.out.println("Make: ");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         car.setMake(userInput);
 
         System.out.println("Model: ");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         car.setModel(userInput);
 
         while (true) {
             System.out.println("Production year: ");
             userInput = scanner.nextLine();
+            if (userInput.charAt(0) == 'q') {
+                return;
+            }
             try {
                 car.setProductionYear(Integer.parseInt(userInput));
                 break;
             } catch (NumberFormatException e) {
-                continue;
+                System.out.println("Production year must be a number");
             }
         }
 
         System.out.println("Fuel: (DIESEL, PETROL, PETROL_LPG, ELECTRIC)");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         car.setFuel(userInput);
 
         System.out.println("Engine volume: ");
         userInput = scanner.nextLine();
+        if (userInput.charAt(0) == 'q') {
+            return;
+        }
         car.setEngineVolume(userInput);
 
         String url = baseUrl + "cars";
@@ -167,7 +201,6 @@ public class ApplicationMenu {
 
             if (person == null) {
                 System.out.println("Choose existing person's id");
-                continue;
             } else {
                 break;
             }
@@ -194,7 +227,6 @@ public class ApplicationMenu {
 
             if (car == null) {
                 System.out.println("Choose existing car's id");
-                continue;
             } else {
                 break;
             }
@@ -206,7 +238,7 @@ public class ApplicationMenu {
     }
 
     public void deletePerson() {
-        this.getPersonList();
+        this.printPersonList();
         System.out.println("Select person id to remove");
         String input;
         int personId;
@@ -254,7 +286,7 @@ public class ApplicationMenu {
             String userInput = scanner.nextLine();
             switch (userInput.charAt(0)) {
                 case '1':
-                    getPersonList();
+                    printPersonList();
                     break;
                 case '2':
                     getCarList();
