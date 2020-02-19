@@ -1,11 +1,9 @@
 package pl.firma.projekt.carbase;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
-import pl.firma.projekt.carbase.http.HttpConnection;
 import pl.firma.projekt.carbase.json.JsonParser;
 import pl.firma.projekt.carbase.rest.RestService;
 
@@ -19,15 +17,10 @@ import java.util.stream.Collectors;
 public class ApplicationMenu {
 
     @Autowired
-    HttpConnection connection;
-    @Autowired
     JsonParser parser;
 
     @Autowired
     RestService restService;
-
-    @Value("${api.url}")
-    private String baseUrl;
 
     private Scanner scanner;
 
@@ -79,9 +72,11 @@ public class ApplicationMenu {
     }
 
     public void userCustomGetRequest() {
-        System.out.println("Enter url (" + baseUrl + "{your input})");
+        System.out.println("Enter url (" + restService.getApiUrl() + "{your input})");
         String userUrl = scanner.nextLine();
-        String response = connection.request(baseUrl + userUrl, "GET");
+        if (userUrl.charAt(0) == 'q')
+            return;
+        String response = restService.customGetRequest( restService.getApiUrl() + userUrl);
         parser.printPretty(response);
     }
 
@@ -295,6 +290,8 @@ public class ApplicationMenu {
 
         while (true) {
             input = scanner.nextLine();
+            if (input.charAt(0) == 'q')
+                return;
             try {
                 personId = Integer.parseInt(input);
                 break;
@@ -303,9 +300,8 @@ public class ApplicationMenu {
             }
         }
 
-        String url = baseUrl + "persons/" + String.valueOf(personId);
-        String response = connection.request(url, "DELETE");
-        System.out.println(response);
+        String response = restService.deletePerson(personId);
+        parser.printPretty(response);
     }
 
     public void deleteCar() {
@@ -316,6 +312,8 @@ public class ApplicationMenu {
 
         while (true) {
             input = scanner.nextLine();
+            if (input.charAt(0) == 'q')
+                return;
             try {
                 carId = Integer.parseInt(input);
                 break;
@@ -324,9 +322,8 @@ public class ApplicationMenu {
             }
         }
 
-        String url = baseUrl + "cars/" + String.valueOf(carId);
-        String response = connection.request(url, "DELETE");
-        System.out.println(response);
+        String response = restService.deleteCar(carId);
+        parser.printPretty(response);
     }
 
     public void run() {
