@@ -43,6 +43,10 @@ public class JsonParser {
         }
     }
 
+    public void printPretty(String str) {
+        System.out.println(this.stringifyPretty(str));
+    }
+
     public List<Person> getPersonList(String jsonString) {
         try {
             return objectMapper.readValue(jsonString, new TypeReference<List<Person>>() {});
@@ -51,9 +55,33 @@ public class JsonParser {
         }
     }
 
+    public Person getPerson(String json) {
+        try {
+            return objectMapper.readValue(json, Person.class);
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
+
+    public void printCars(List<Car> carList) {
+        try {
+            System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(carList));
+        } catch (JsonProcessingException e) {
+            System.out.println(e);
+        }
+    }
+
     public List<Car> getCarList(String jsonString) {
         try {
             return objectMapper.readValue(jsonString, new TypeReference<List<Car>>() {});
+        } catch (JsonProcessingException e) {
+            return null;
+        }
+    }
+
+    public Car getCar(String json) {
+        try {
+            return objectMapper.readValue(json, Car.class);
         } catch (JsonProcessingException e) {
             return null;
         }
