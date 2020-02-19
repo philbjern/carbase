@@ -9,7 +9,6 @@ import pl.firma.projekt.carbase.rest.RestService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -23,9 +22,13 @@ public class ApplicationMenu {
     RestService restService;
 
     private Scanner scanner;
+    private List<String> menuEntries;
+    private int lineLength;
+    private static final String MENU_CHAR = "=";
 
     public ApplicationMenu() {
-        this.scanner =  new Scanner(System.in);
+        this.scanner = new Scanner(System.in);
+        this.init();
     }
 
     public void printLine(int lineLength, String character) {
@@ -35,8 +38,8 @@ public class ApplicationMenu {
         System.out.println(output.toString());
     }
 
-    public void printMenu() {
-        List<String> menuEntries = new ArrayList<>();
+    public void init() {
+        menuEntries = new ArrayList<>();
         menuEntries.add("Choose menu option");
         menuEntries.add("1. Get person list");
         menuEntries.add("2. Get car list");
@@ -49,14 +52,17 @@ public class ApplicationMenu {
         menuEntries.add("9. Custom GET request");
         menuEntries.add("q. Quit application");
 
-        Optional<String> item = menuEntries.stream()
-                .reduce((s1, s2) -> s1.length() > s2.length() ? s1 : s2);
-        int entryMaxLength = item.map(String::length).orElse(20);
+        this.lineLength = menuEntries.stream()
+                .reduce((s1, s2) -> s1.length() > s2.length() ? s1 : s2)
+                .map(String::length)
+                .orElse(20);
+    }
 
-        printLine(entryMaxLength, "=");
+    public void printMenu() {
+        printLine(this.lineLength, MENU_CHAR);
         for (String s : menuEntries)
             System.out.println(s);
-        printLine(entryMaxLength, "=");
+        printLine(this.lineLength, MENU_CHAR);
     }
 
     public void printPersonList() {
@@ -76,7 +82,7 @@ public class ApplicationMenu {
         String userUrl = scanner.nextLine();
         if (userUrl.charAt(0) == 'q')
             return;
-        String response = restService.customGetRequest( restService.getApiUrl() + userUrl);
+        String response = restService.customGetRequest(restService.getApiUrl() + userUrl);
         parser.printPretty(response);
     }
 
@@ -244,15 +250,18 @@ public class ApplicationMenu {
         }
 
         List<Car> cars = person.getCars();
-        List<Integer> availableIds = new ArrayList<>();
         if (!cars.isEmpty()) {
+            List<Integer> availableIds = new ArrayList<>();
             for (Car c : cars) {
                 availableIds.add(c.getId());
             }
-            String idList = availableIds.stream().map(String::valueOf).collect(Collectors.joining(", "));
+            String idString = availableIds.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(", "));
+
             while (true) {
                 parser.printCars(cars);
-                System.out.println("Choose car id to remove (" + idList + ")");
+                System.out.println("Choose car id to remove (" + idString + ")");
                 while (true) {
                     userInput = scanner.nextLine();
                     if (userInput.charAt(0) == 'q')
@@ -264,7 +273,6 @@ public class ApplicationMenu {
                         System.out.println("Car's id must be a number");
                     }
                 }
-
                 car = parser.getCar(restService.getCar(carId));
                 if (car == null) {
                     System.out.println("Choose existing car's id");
@@ -318,7 +326,7 @@ public class ApplicationMenu {
                 carId = Integer.parseInt(input);
                 break;
             } catch (NumberFormatException e) {
-                System.out.println("Must provide number");
+                System.out.println("Must provide a number");
             }
         }
 
