@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:8080")
 public class PersonRestController {
     private PersonService personService;
 
@@ -54,12 +55,27 @@ public class PersonRestController {
     }
 
     @PostMapping("/persons/{personId}/cars")
-    public ResponseEntity<?> addPersonCar(@PathVariable int personId, @RequestBody Car car) {
+    public ResponseEntity<?> addCarToPerson(@PathVariable int personId, @RequestBody Car car) {
         Person person = personService.findById(personId);
         if (person == null) {
             return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         }
         car.setId(0);
+        person.addCar(car);
+        personService.save(person);
+        return new ResponseEntity<>(person, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/persons/{personId}/cars/{carId}")
+    public ResponseEntity<?> addCarToPersonByCarId(@PathVariable int personId, @PathVariable int carId) {
+        Person person = personService.findById(personId);
+        if (person == null) {
+            return new ResponseEntity<>(new ResponseMessage("Person not found"), HttpStatus.NOT_FOUND);
+        }
+        Car car = carService.findById(carId);
+        if (car == null) {
+            return new ResponseEntity<>(new ResponseMessage("Car not found"), HttpStatus.NOT_FOUND);
+        }
         person.addCar(car);
         personService.save(person);
         return new ResponseEntity<>(person, HttpStatus.CREATED);
