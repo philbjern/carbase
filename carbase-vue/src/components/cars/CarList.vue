@@ -27,6 +27,7 @@
         </tr>
       </tbody>
     </table>
+    <button class="btn" @click="notificationTest">Test Notifications</button>
   </div>
 </template>
 
@@ -46,6 +47,12 @@ export default {
           data => (this.carArr = data),
           error => console.log(error)
         );
+    },
+    notificationTest() {
+      this.$emit("notify", {
+        type: "info",
+        message: "Notification emitting test"
+      });
     }
   },
   created() {

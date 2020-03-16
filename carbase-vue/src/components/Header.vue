@@ -31,7 +31,6 @@ export default {};
   display: flex;
   align-items: baseline;
   padding: 0.25rem 0;
-  margin-bottom: 1.5rem;
 }
 
 .nav {

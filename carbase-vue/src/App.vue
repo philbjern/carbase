@@ -1,23 +1,19 @@
 <template>
   <div>
     <app-header></app-header>
-    <div class="content">
-      <div
-        class="notification"
-        v-for="(notification, i) in notifications"
-        :key="i"
-      >
-        {{ notification.message }}
-      </div>
-    </div>
+    <app-notifications
+      :notifications="notifications"
+      @notificationremoved="removeNotification($event)"
+    ></app-notifications>
     <transition name="fade" mode="out-in">
-      <router-view></router-view>
+      <router-view @notify="notify($event)"></router-view>
     </transition>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
+import Notifications from "./components/Notifications.vue";
 
 export default {
   data() {
@@ -26,12 +22,25 @@ export default {
         {
           type: "error",
           message: "Error occured while deleting person"
+        },
+        {
+          type: "success",
+          message: "Successfully edited car info"
         }
       ]
     };
   },
   components: {
-    appHeader: Header
+    appHeader: Header,
+    appNotifications: Notifications
+  },
+  methods: {
+    removeNotification(index) {
+      this.notifications.splice(index, 1);
+    },
+    notify(notification) {
+      this.notifications.push(notification);
+    }
   }
 };
 </script>
@@ -76,6 +85,10 @@ p {
   max-width: 1200px;
   min-width: 500px;
   margin: auto;
+}
+
+.container.content-wrapper {
+  margin-top: 1rem;
 }
 
 .shadow {
@@ -123,6 +136,7 @@ p {
 table {
   width: 100%;
   border-spacing: 0;
+  margin: 1rem 0;
 }
 
 thead td {
@@ -148,5 +162,9 @@ td ul {
 
 td ul li {
   padding: 0.25rem;
+}
+
+a {
+  color: inherit;
 }
 </style>
