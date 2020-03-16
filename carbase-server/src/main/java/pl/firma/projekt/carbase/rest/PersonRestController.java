@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.firma.projekt.carbase.entity.Car;
 import pl.firma.projekt.carbase.entity.Person;
+import pl.firma.projekt.carbase.service.CarService;
 import pl.firma.projekt.carbase.service.PersonService;
 
 import java.util.List;
@@ -15,10 +16,12 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:8080")
 public class PersonRestController {
     private PersonService personService;
+    private CarService carService;
 
     @Autowired
-    public PersonRestController(PersonService personService) {
+    public PersonRestController(PersonService personService, CarService carService) {
         this.personService = personService;
+        this.carService = carService;
     }
 
     @GetMapping("/persons")
@@ -70,11 +73,11 @@ public class PersonRestController {
     public ResponseEntity<?> addCarToPersonByCarId(@PathVariable int personId, @PathVariable int carId) {
         Person person = personService.findById(personId);
         if (person == null) {
-            return new ResponseEntity<>(new ResponseMessage("Person not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         }
         Car car = carService.findById(carId);
         if (car == null) {
-            return new ResponseEntity<>(new ResponseMessage("Car not found"), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Car not found", HttpStatus.NOT_FOUND);
         }
         person.addCar(car);
         personService.save(person);
