@@ -8,13 +8,19 @@
 
     <div class="cards">
       <router-link to="/persons" tag="div" class="card">
-        <div class="content">
+        <div class="bg-icon">
+          <i class="fa fa-user"></i>
+        </div>
+        <div class="content text-center">
           <h1>Persons</h1>
           <p class="color-gray">Show list of all car users</p>
         </div>
       </router-link>
       <router-link to="/cars" tag="div" class="card">
-        <div class="content">
+        <div class="bg-icon">
+          <i class="fa fa-car"></i>
+        </div>
+        <div class="content text-center">
           <h1>Cars</h1>
           <p class="color-gray">Show list of all cars</p>
         </div>
@@ -77,6 +83,8 @@ export default {};
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
   transition: all 1s;
 }
 
@@ -94,6 +102,20 @@ export default {};
   transform: translateY(-20px) scale(1.4);
   transition: transform 0.5s;
   color: white;
+}
+
+.bg-icon {
+  position: absolute;
+  font-size: 15rem;
+  bottom: -40px;
+  left: -20px;
+  color: rgba(0, 0, 0, 0.35);
+  transform: rotate(15deg);
+  transition: all 0.5s;
+}
+
+.card:hover .bg-icon {
+  color: rgba(255, 255, 255, 0.35);
 }
 
 .content p {
