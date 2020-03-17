@@ -1,8 +1,8 @@
 <template>
   <div class="container content-wrapper">
     <h1>Car List</h1>
-    <p>List of all cars available in carbase</p>
-    <table>
+    <p>Table of all cars available in carbase</p>
+    <table v-if="carArr.length != 0" class="table">
       <thead>
         <tr>
           <td>Make</td>
@@ -27,11 +27,16 @@
         </tr>
       </tbody>
     </table>
+    <div class="message" v-else>
+      No data available.
+    </div>
     <button class="btn" @click="notificationTest">Test Notifications</button>
   </div>
 </template>
 
 <script>
+import { getNotification } from "../../utils";
+
 export default {
   data() {
     return {
@@ -45,13 +50,19 @@ export default {
         .then(response => response.json())
         .then(
           data => (this.carArr = data),
-          error => console.log(error)
+          error => {
+            console.log(error);
+            this.$emit(
+              "notify",
+              getNotification("error", "Could not load car data.")
+            );
+          }
         );
     },
     notificationTest() {
       this.$emit("notify", {
-        type: "info",
-        message: "Notification emitting test"
+        type: "error",
+        message: "Test notification"
       });
     }
   },
