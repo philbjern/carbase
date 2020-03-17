@@ -12,7 +12,9 @@
         }"
       >
         <div class="container">
-          <p style="flex: 1 0 auto;">{{ notification.message }}</p>
+          <p style="flex: 1 0 auto;">
+            <i class="fa fa-bell-o"></i> {{ notification.message }}
+          </p>
           <p>
             <a href="#" @click.prevent="removeNotification(i)"
               ><i class="fa fa-times-circle"></i
@@ -26,9 +28,6 @@
 
 <script>
 export default {
-  data() {
-    return {};
-  },
   props: ["notifications"],
   methods: {
     removeNotification(index) {
@@ -67,7 +66,6 @@ export default {
 
 .fade-enter-active {
   transition: all 0.5s;
-  opacity: 1;
 }
 
 .fade-leave {
