@@ -59,6 +59,10 @@ export default {
 <style>
 @import url("https://fonts.googleapis.com/css?family=Playfair+Display|Roboto");
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   color: rgba(0, 0, 0, 0.85);
@@ -128,7 +132,7 @@ p {
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.25s;
-  margin: 0 0.2rem 0 0;
+  margin: 0 0.2rem 0 0.2rem;
 }
 
 .btn:hover {
@@ -142,9 +146,6 @@ p {
 
 .fade-enter-active {
   transition: opacity 0.5s;
-}
-
-.fade-leave {
 }
 
 .fade-leave-active {
@@ -205,6 +206,26 @@ a {
 
 .mt-3 {
   margin-top: 3rem;
+}
+
+.mb-3 {
+  margin-bottom: 3rem;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-end {
+  justify-content: flex-end;
+}
+
+.flex-grow {
+  flex: 1 0 auto;
+}
+
+.margin-auto {
+  margin: auto;
 }
 
 .message {
