@@ -44,6 +44,12 @@
         at imperdiet felis, vitae elementum enim.
       </p>
 
+      <div class="quote">
+        Aliquam nisi dui, congue vitae lacus sit amet, eleifend finibus velit.
+        Orci varius natoque penatibus et magnis dis parturient montes, nascetur
+        ridiculus mus.
+      </div>
+
       <p>
         Aliquam nisi dui, congue vitae lacus sit amet, eleifend finibus velit.
         Orci varius natoque penatibus et magnis dis parturient montes, nascetur
@@ -133,5 +139,11 @@ export default {};
   left: 3rem;
   top: -5rem;
   transform: rotate(25deg);
+}
+
+.quote {
+  margin: 2rem 4rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
 }
 </style>
