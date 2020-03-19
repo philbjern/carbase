@@ -2,11 +2,18 @@
   <div class="container content-wrapper">
     <h1>Person List</h1>
     <p>List of all carbase users</p>
+    <div class="row">
+      <router-link to="persons/new">
+        <button class="btn">Add New Person</button>
+      </router-link>
+    </div>
     <div v-if="personArr.length != 0">
       <app-person-card
         v-for="(person, i) in personArr"
         :key="i"
         :person="person"
+        @notify="notify($event)"
+        @ondelete="deletePerson($event)"
       ></app-person-card>
     </div>
     <div v-else class="message">
@@ -35,7 +42,9 @@ export default {
         .get("persons")
         .then(response => response.json())
         .then(
-          data => (this.personArr = data),
+          data => {
+            this.personArr = data;
+          },
           error => {
             console.log(error);
             this.$emit(
@@ -44,11 +53,26 @@ export default {
             );
           }
         );
+    },
+    deletePerson(personId) {
+      let indexToRemove = -1;
+      for (let i = 0; i < this.personArr.length; i++) {
+        if (this.personArr[i].id === personId) {
+          indexToRemove = i;
+          break;
+        }
+      }
+      if (indexToRemove >= 0) {
+        this.personArr.splice(indexToRemove, 1);
+      }
+    },
+    notify(notification) {
+      this.$emit("notify", notification);
     }
   },
   created() {
     // fetch data
-    console.log(this.fetchData());
+    this.fetchData();
   }
 };
 </script>

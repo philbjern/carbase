@@ -19,34 +19,10 @@
     </div>
     <div class="row flex-end">
       <div class="buttons">
-        <button class="btn">Edit Profile</button>
-        <button class="btn">Delete Person</button>
+        <button class="btn" @click="editProfile">Edit Profile</button>
+        <button class="btn" @click="deletePerson">Delete Person</button>
       </div>
     </div>
-    <!-- <table>
-      <tbody>
-        <tr>
-          <td>First Name</td>
-          <td>
-            <span class="text-bigger">{{ person.firstName }}</span>
-          </td>
-          <td>E-mail</td>
-          <td>
-            <span class="text-bigger">{{ person.email }}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Last Name</td>
-          <td>
-            <span class="text-bigger">{{ person.lastName }}</span>
-          </td>
-          <td>Number of cars</td>
-          <td>
-            <span class="text-bigger">{{ person.cars.length }}</span>
-          </td>
-        </tr>
-      </tbody>
-    </table> -->
   </div>
   <div v-else>
     <p>No data</p>
@@ -54,8 +30,34 @@
 </template>
 
 <script>
+import { getNotification, scrollTop } from "../../utils";
+
 export default {
-  props: ["person"]
+  props: ["person"],
+  methods: {
+    editProfile() {
+      this.$router.push({ path: `/persons/${this.person.id}/edit` });
+    },
+    deletePerson() {
+      const url = `persons/${this.person.id}`;
+      this.$http.delete(url).then(
+        () => {
+          this.$emit(
+            "notify",
+            getNotification("success", "Successfully deleted person profile")
+          );
+          this.$emit("ondelete", this.person.id);
+          scrollTop();
+        },
+        error => {
+          this.$emit(
+            "notify",
+            getNotification("error", "Error while deleting person profile")
+          );
+        }
+      );
+    }
+  }
 };
 </script>
 
@@ -78,19 +80,12 @@ td {
   min-width: 150px;
 }
 
-.flex-end {
-  justify-content: flex-end;
-}
-
-.flex-grow {
-  flex: 1 0 auto;
-}
-
 .card {
-  max-width: 90%;
+  max-width: 70%;
   margin: 1.5rem auto;
   padding: 1rem;
-  border: 1px solid lightgray;
+  border: 5px solid #f9dc5c;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.05);
 }
 
 .card .row {
@@ -98,9 +93,13 @@ td {
   align-items: center;
 }
 
-@media screen and (max-width: 1120px) {
+@media screen and (max-width: 900px) {
   .buttons {
     display: block;
+  }
+
+  .card {
+    max-width: 100%;
   }
 }
 </style>
