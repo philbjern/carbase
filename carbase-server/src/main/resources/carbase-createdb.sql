@@ -48,3 +48,7 @@ CREATE TABLE `person_car` (
 
 SET FOREIGN_KEY_CHECKS = 1;
  
+DROP USER IF EXIST 'carbaseadmin'@'localhost';
+
+CREATE USER 'carbaseadmin'@'localhost' IDENTIFIED BY 'carbaseadmin';
+GRANT ALL PRIVILEGES ON carbase.* TO 'carbaseadmin'@'localhost';
