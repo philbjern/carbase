@@ -90,6 +90,12 @@ public class PersonRestController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    @PutMapping("/persons/{personId}")
+    public ResponseEntity<?> updatePerson(@PathVariable int personId, @RequestBody Person person) {
+        personService.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
     @DeleteMapping("/persons/{personId}")
     public ResponseEntity<?> deletePerson(@PathVariable int personId) {
         Person person = personService.findById(personId);
