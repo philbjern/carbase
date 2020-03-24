@@ -2,7 +2,7 @@
   <div class="container content-wrapper">
     <h1>Person List</h1>
     <p>List of all carbase users</p>
-    <div class="row">
+    <div class="row" v-if="personArr.length != 0">
       <router-link to="persons/new">
         <button class="btn">Add New Person</button>
       </router-link>
