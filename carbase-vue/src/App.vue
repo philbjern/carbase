@@ -234,4 +234,71 @@ a {
   font-size: 2.5rem;
   color: rgba(0, 0, 0, 0.15);
 }
+
+/* PERSON FORM, CAR FORM */
+
+.pill {
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  margin: 0.2rem;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 5px;
+  position: relative;
+}
+
+.pill i {
+  opacity: 0;
+  position: absolute;
+  right: -5px;
+  top: -5px;
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.pill:hover i {
+  opacity: 1;
+  color: black;
+}
+
+.form input {
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+  padding: 0.5rem 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+  position: relative;
+}
+
+.form table {
+  width: 700px;
+}
+
+.form table td {
+  padding: 1.5rem 0.5rem;
+}
+
+.form table .fix-width {
+  width: 150px;
+}
+
+.form select {
+  background: white;
+  font-size: 1rem;
+}
+
+.form input.missing-field {
+  border-bottom: 1px solid lightcoral;
+}
+
+.missing-field::after {
+  color: lightcoral;
+  position: absolute;
+  content: "<div class='tooltip'>Missing field</div>";
+  display: block;
+  right: 0px;
+  top: 0px;
+  width: 10px;
+  height: 10px;
+  background: black;
+}
 </style>
