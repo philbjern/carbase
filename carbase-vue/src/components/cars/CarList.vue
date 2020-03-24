@@ -2,6 +2,11 @@
   <div class="container content-wrapper">
     <h1>Car List</h1>
     <p>Table of all cars available in carbase</p>
+    <div class="row">
+      <router-link to="cars/new">
+        <button class="btn">Add New Car</button>
+      </router-link>
+    </div>
     <table v-if="carArr.length != 0" class="table">
       <thead>
         <tr>
@@ -21,8 +26,8 @@
           <td>{{ car.fuel.toLowerCase() }}</td>
           <td>{{ car.engineVolume }}L</td>
           <td>
-            <button class="btn">Edit Car</button
-            ><button class="btn">Delete Car</button>
+            <button class="btn" @click="editCar(car.id)">Edit Car</button>
+            <button class="btn" @click="deleteCar(car.id)">Delete Car</button>
           </td>
         </tr>
       </tbody>
@@ -30,7 +35,6 @@
     <div class="message" v-else>
       No data available.
     </div>
-    <button class="btn" @click="notificationTest">Test Notifications</button>
   </div>
 </template>
 
@@ -59,16 +63,50 @@ export default {
           }
         );
     },
-    notificationTest() {
-      this.$emit("notify", {
-        type: "error",
-        message: "Test notification"
-      });
+    editCar(carId) {
+      this.$router.push({ path: `cars/${carId}` });
+    },
+    deleteCar(carId) {
+      this.$http
+        .delete(`cars/${carId}`)
+        .then(response => response)
+        .then(
+          success => {
+            // splice carArr, push notification
+            let arrIdx = -1;
+            for (let i = 0; i < this.carArr.length; i++) {
+              if (this.carArr[i].id === carId) {
+                arrIdx = i;
+                break;
+              }
+            }
+            if (arrIdx > -1) {
+              this.carArr.splice(arrIdx, 1);
+              this.$emit(
+                "notify",
+                getNotification(
+                  "success",
+                  "Successfully deleted car with id " + carId
+                )
+              );
+            }
+          },
+          error => {
+            console.log(error);
+            this.$emit(
+              "notify",
+              getNotification(
+                "error",
+                "Error while deleting car with id " + carId
+              )
+            );
+          }
+        );
     }
   },
   created() {
     // fetch data
-    console.log(this.fetchData());
+    this.fetchData();
   }
 };
 </script>
