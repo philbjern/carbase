@@ -36,7 +36,7 @@ export default {
   props: ["person"],
   methods: {
     editProfile() {
-      this.$router.push({ path: `/persons/${this.person.id}/edit` });
+      this.$router.push({ path: `/persons/${this.person.id}` });
     },
     deletePerson() {
       const url = `persons/${this.person.id}`;
