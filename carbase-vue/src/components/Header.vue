@@ -5,8 +5,8 @@
       <i class="fa fa-car"></i>
       <ul class="nav">
         <router-link to="/" tag="li" exact>Home</router-link>
-        <router-link to="/persons" tag="li" exact>Persons</router-link>
-        <router-link to="/cars" tag="li" exact>Cars</router-link>
+        <router-link to="/persons" tag="li">Persons</router-link>
+        <router-link to="/cars" tag="li">Cars</router-link>
       </ul>
     </div>
   </div>
