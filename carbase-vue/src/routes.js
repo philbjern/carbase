@@ -11,5 +11,6 @@ export const routes = [
   { path: "/persons/:id", component: PersonForm },
   { path: "/cars", component: CarList },
   { path: "/cars/new", component: CarForm },
-  { path: "/cars/:id", component: CarForm }
+  { path: "/cars/:id", component: CarForm },
+  { path: "*", redirect: "/" }
 ];
