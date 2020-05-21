@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
 @RequestMapping(path = "/person")
+@CrossOrigin(origins = "http://localhost:8080")
 public class PersonController {
 
     @Autowired
@@ -71,3 +71,4 @@ public class PersonController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+
