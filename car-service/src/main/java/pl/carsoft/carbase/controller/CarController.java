@@ -8,8 +8,7 @@ import pl.carsoft.carbase.entity.Car;
 import pl.carsoft.carbase.repository.CarRepository;
 
 @RestController
-@RequestMapping(path = "/car")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(path = "/api/cars")
 public class CarController {
 
     @Autowired
