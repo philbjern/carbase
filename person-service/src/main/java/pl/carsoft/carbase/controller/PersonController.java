@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/person")
-@CrossOrigin(origins = "http://localhost:8080")
+@RequestMapping(path = "/api/person/")
+
 public class PersonController {
 
     @Autowired
@@ -28,8 +28,7 @@ public class PersonController {
 
     @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> findById(@PathVariable("id") Long id) {
-        Person person = null;
-        person = personRepository.findById(id).orElse(null);
+        Person person = personRepository.findById(id).orElse(null);
         if (person != null) {
             return new ResponseEntity<>(person, HttpStatus.OK);
         } else {
