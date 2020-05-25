@@ -31,5 +31,6 @@
     <module>api-gateway</module>
     <module>person-service</module>
       <module>car-service</module>
+      <module>carsharing-service</module>
   </modules>
 </project>
