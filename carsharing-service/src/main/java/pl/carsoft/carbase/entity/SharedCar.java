@@ -16,6 +16,11 @@ public class SharedCar {
 
     public SharedCar() {}
 
+    public SharedCar(Long carId, Long personId) {
+        this.carId = carId;
+        this.personId = personId;
+    }
+
     public SharedCar(Long id, Long carId, Long personId) {
         this.id = id;
         this.carId = carId;

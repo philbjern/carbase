@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import pl.carsoft.carbase.entity.SharedCar;
 import pl.carsoft.carbase.repository.CarShareRepository;
 import pl.carsoft.carbase.service.CarService;
 import pl.carsoft.carbase.service.PersonService;
@@ -97,19 +98,49 @@ public class CarShareController {
     @RequestMapping(path = "persons/{personId}/cars/{carId}", method = RequestMethod.POST)
     public ResponseEntity<?> addCarToPersonById(@PathVariable("personId") Long personId,
                                                 @PathVariable("carId") Long carId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        SharedCar carShare = new SharedCar(carId, personId);
+        carShareRepository.save(carShare);
+        return new ResponseEntity<>(personService.getPersonById(personId), HttpStatus.CREATED);
     }
 
     @RequestMapping(path = "persons/{personId}/cars/{carId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removeCarFromPersonById(@PathVariable("personId") Long personId,
                                                      @PathVariable("carId") Long carId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        List<SharedCar> personCars = new ArrayList<>();
+        carShareRepository.findAll().forEach(carShare -> {
+            if (carShare.getPersonId().equals(personId)) {
+                personCars.add(carShare);
+            }
+        });
+        if (!personCars.isEmpty()) {
+            for (SharedCar carShare : personCars) {
+                if (carShare.getCarId().equals(carId)) {
+                    carShareRepository.delete(carShare);
+                    return new ResponseEntity<>(personService.getPersonById(personId), HttpStatus.OK);
+                }
+            }
+        }
+        return new ResponseEntity<>("Person does not own car with this id", HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(path = "cars/{carId}/persons/{personId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> removePersonFromCarById(@PathVariable("personId") Long personId,
                                                      @PathVariable("carId") Long carId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        List<SharedCar> carOwners = new ArrayList<>();
+        carShareRepository.findAll().forEach(carShare -> {
+            if (carShare.getCarId().equals(carId)) {
+                carOwners.add(carShare);
+            }
+        });
+        if (!carOwners.isEmpty()) {
+            for (SharedCar carShare : carOwners) {
+                if (carShare.getPersonId().equals(personId)) {
+                    carShareRepository.delete(carShare);
+                    return new ResponseEntity<>(carService.getCarById(carId), HttpStatus.OK);
+                }
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
