@@ -1,16 +1,41 @@
 package pl.carsoft.carbase.gateway.entity;
 
+import java.util.Date;
+import java.util.List;
+
 public class Person {
 
-    private String firstName;
-    private String lastName;
-    private String email;
-//    private List<Car> cars;
+    private Long id;
 
-    public Person(String firstName, String lastName, String email) {
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
+    private Date registeredOn;
+
+    private List<Car> carsList;
+
+    public Person() {}
+
+    public Person(String firstName, String lastName, String email, Date registeredOn) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
+        this.registeredOn = registeredOn;
+    }
+
+//    public Person(String firstName, String lastName, String email) {
+//        this(firstName, lastName, email, LocalDateTime.now());
+//    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -37,23 +62,35 @@ public class Person {
         this.email = email;
     }
 
-//    public List<Car> getCars() {
-//        return cars;
-//    }
-//
-//    public void setCars(List<Car> cars) {
-//        this.cars = cars;
-//    }
+    public Date getRegisteredOn() {
+        return registeredOn;
+    }
+
+    public void setRegisteredOn(Date registeredOn) {
+        this.registeredOn = registeredOn;
+    }
+
+    public List<Car> getCarsList() {
+        return carsList;
+    }
+
+    public void setCarsList(List<Car> carsList) {
+        this.carsList = carsList;
+    }
 
     @Override
     public String toString() {
         return "Person{" +
-                "firstName='" + firstName + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
+                ", registeredOn=" + registeredOn +
                 '}';
     }
+
 }
+
 
 //
 //@Entity
