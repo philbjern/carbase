@@ -1,17 +1,17 @@
-package pl.carsoft.carbase.controller;
+package pl.carsoft.carbase.personservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.carsoft.carbase.entity.Person;
-import pl.carsoft.carbase.repository.PersonRepository;
+import pl.carsoft.carbase.personservice.entity.Person;
+import pl.carsoft.carbase.personservice.repository.PersonRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/person")
+@RequestMapping(path = "/api/persons")
 
 public class PersonController {
 

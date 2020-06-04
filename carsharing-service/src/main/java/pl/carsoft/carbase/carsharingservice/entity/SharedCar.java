@@ -1,4 +1,4 @@
-package pl.carsoft.carbase.entity;
+package pl.carsoft.carbase.carsharingservice.entity;
 
 import javax.persistence.*;
 

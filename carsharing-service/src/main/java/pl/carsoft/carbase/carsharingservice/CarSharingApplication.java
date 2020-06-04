@@ -1,13 +1,13 @@
-package pl.carsoft.carbase;
+package pl.carsoft.carbase.carsharingservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CarServiceApplication {
+public class CarSharingApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(CarServiceApplication.class, args);
+        SpringApplication.run(CarSharingApplication.class, args);
     }
 
 }

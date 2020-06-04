@@ -1,4 +1,4 @@
-package pl.carsoft.carbase.entity;
+package pl.carsoft.carbase.personservice.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedDate;

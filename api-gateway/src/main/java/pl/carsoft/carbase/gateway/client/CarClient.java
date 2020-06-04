@@ -23,6 +23,11 @@ public class CarClient {
     @Value("${service.carshareservice.url}")
     private String carShareServiceURL;
 
+    /**
+     * Calls CarService for list of all {@link Car}
+     * @return list of all cars
+     * @throws RestClientException when service is unreachable
+     */
     public List<Car> findAll() throws RestClientException {
         ResponseEntity<Car[]> response = restTemplate.getForEntity(carServiceURL + "/api/cars", Car[].class);
         if (response.getStatusCode().equals(HttpStatus.OK)) {
@@ -33,6 +38,12 @@ public class CarClient {
         return Collections.emptyList();
     }
 
+    /**
+     * Calls CarShareService for list of {@link Car}s used by a {@link Person} with {@param personId}
+     * @param personId id of a person whose cars are search for
+     * @return list of cars used by a person
+     * @throws RestClientException when service is unreachable
+     */
     public List<Car> findPersonCars(Long personId) throws RestClientException {
         ResponseEntity<Car[]> response = restTemplate.getForEntity(carShareServiceURL + "/api/persons/" + personId,
                 Car[].class);
@@ -42,5 +53,13 @@ public class CarClient {
             }
         }
         return Collections.emptyList();
+    }
+
+    public Car findCarById(Long carId) {
+        ResponseEntity<Car> response = restTemplate.getForEntity(carServiceURL + "/api/cars/" + carId, Car.class);
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            return response.getBody();
+        }
+        return null;
     }
 }

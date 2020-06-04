@@ -1,12 +1,10 @@
-package pl.carsoft.carbase.service;
+package pl.carsoft.carbase.carsharingservice.service;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import javax.persistence.Entity;
-import java.util.List;
 
 @Service
 public class CarService {
@@ -19,13 +17,12 @@ public class CarService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<Entity> getAllCars() {
-//        System.out.println(carServiceUrl);
-        return restTemplate.getForObject(carServiceUrl + "/api/cars", List.class);
-    }
-
-    public ResponseEntity<String> getCarById(Long carId) {
-        return restTemplate.getForEntity(carServiceUrl + "/api/cars/" + carId, String.class);
+    public String getCarById(Long carId) {
+        ResponseEntity<String> response = restTemplate.getForEntity(carServiceUrl + "/api/cars/" + carId, String.class);
+        if (response.getStatusCode().equals(HttpStatus.OK)) {
+            return response.getBody();
+        }
+        return null;
     }
 
 }

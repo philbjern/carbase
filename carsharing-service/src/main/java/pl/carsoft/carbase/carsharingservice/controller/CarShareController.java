@@ -1,4 +1,4 @@
-package pl.carsoft.carbase.controller;
+package pl.carsoft.carbase.carsharingservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import pl.carsoft.carbase.entity.SharedCar;
-import pl.carsoft.carbase.repository.CarShareRepository;
-import pl.carsoft.carbase.service.CarService;
-import pl.carsoft.carbase.service.PersonService;
+import pl.carsoft.carbase.carsharingservice.entity.SharedCar;
+import pl.carsoft.carbase.carsharingservice.repository.CarShareRepository;
+import pl.carsoft.carbase.carsharingservice.service.CarService;
+import pl.carsoft.carbase.carsharingservice.service.PersonService;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,6 +35,9 @@ public class CarShareController {
 
     @RequestMapping(path = "persons/{personId}", method = RequestMethod.GET)
     public ResponseEntity<?> getPersonCars(@PathVariable("personId") Long personId) {
+        if (personService.getPersonById(personId) == null)
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
+
         List<Long> carIds = new ArrayList<>();
         carShareRepository.findAll().forEach((el) -> {
             if (el.getPersonId().equals(personId)) {
@@ -42,12 +45,12 @@ public class CarShareController {
             }
         });
         if (carIds.isEmpty()) {
-            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
         }
 
         StringBuilder responseJsonString = new StringBuilder("[");
         carIds.forEach((carId) -> {
-            responseJsonString.append(carService.getCarById(carId).getBody());
+            responseJsonString.append(carService.getCarById(carId));
             responseJsonString.append(",");
         });
         responseJsonString.deleteCharAt(responseJsonString.lastIndexOf(","));
@@ -63,6 +66,10 @@ public class CarShareController {
 
     @RequestMapping(path = "cars/{carId}", method = RequestMethod.GET)
     public ResponseEntity<?> getCarOwners(@PathVariable("carId") Long carId) {
+        if (carService.getCarById(carId) == null) {
+            return new ResponseEntity<>("Car not found", HttpStatus.NOT_FOUND);
+        }
+
         List<Long> ownerIds = new ArrayList<>();
         carShareRepository.findAll().forEach(el -> {
             if (el.getCarId().equals(carId)) {
@@ -70,12 +77,12 @@ public class CarShareController {
             }
         });
         if (ownerIds.isEmpty()) {
-            return new ResponseEntity<>(ownerIds, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.OK);
         }
 
         StringBuilder responseJsonString = new StringBuilder("[");
         ownerIds.forEach(id -> {
-            responseJsonString.append(personService.getPersonById(id).getBody())
+            responseJsonString.append(personService.getPersonById(id))
                     .append(",");
         });
         responseJsonString.deleteCharAt(responseJsonString.lastIndexOf(","));

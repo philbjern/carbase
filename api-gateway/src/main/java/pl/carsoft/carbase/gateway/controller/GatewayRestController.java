@@ -13,12 +13,13 @@ import pl.carsoft.carbase.gateway.entity.Car;
 import pl.carsoft.carbase.gateway.entity.Person;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "api")
-@CrossOrigin(origins = "")
+@CrossOrigin(origins = "http://localhost:8080")
 public class GatewayRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRestController.class);
@@ -42,11 +43,12 @@ public class GatewayRestController {
     @RequestMapping(path = "persons", method = RequestMethod.GET)
     public ResponseEntity<?> findAllPersons() {
         try {
-            List<Person> personList = personClient.findAll();
-            for (Person person : personList) {
+            List<Person> result = new ArrayList<>();
+            personClient.findAll().forEach(person -> {
                 person.setCarsList(carClient.findPersonCars(person.getId()));
-            }
-            return new ResponseEntity<>(personList, HttpStatus.OK);
+                result.add(person);
+            });
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (RestClientException e) {
             LOGGER.info("Cannot reach service, " + e.getMessage());
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.SERVICE_UNAVAILABLE);
@@ -55,14 +57,28 @@ public class GatewayRestController {
 
     @RequestMapping(path = "persons/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> findPersonById(@PathVariable("id") Long personId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            Person person = personClient.findPersonById(personId);
+            if (person != null) {
+                person.setCarsList(carClient.findPersonCars(personId));
+                return new ResponseEntity<>(person, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
+        } catch (RestClientException e) {
+          LOGGER.info("Cannot reach service, " + e.getMessage());
+          return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     @RequestMapping(path = "cars", method = RequestMethod.GET)
     public ResponseEntity<?> findAllCars() {
         try {
-            List<Car> carList = carClient.findAll();
-            return new ResponseEntity<>(carList, HttpStatus.OK);
+            List<Car> result = new ArrayList<>();
+            carClient.findAll().forEach(car -> {
+                car.setOwnerList(personClient.findCarOwners(car.getId()));
+                result.add(car);
+            });
+            return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (RestClientException e) {
             LOGGER.info("Cannot reach service, " + e.getMessage());
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.SERVICE_UNAVAILABLE);
@@ -71,6 +87,16 @@ public class GatewayRestController {
 
     @RequestMapping(path = "cars/{id}", method = RequestMethod.GET)
     public ResponseEntity<?> findCarById(@PathVariable("id") Long carId) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        try {
+            Car car = carClient.findCarById(carId);
+            if (car != null) {
+                car.setOwnerList(personClient.findCarOwners(car.getId()));
+                return new ResponseEntity<>(car, HttpStatus.OK);
+            }
+            return new ResponseEntity<>("Car not found", HttpStatus.NOT_FOUND);
+        } catch (RestClientException e) {
+            LOGGER.info("Cannot reach service, " + e.getMessage());
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 }

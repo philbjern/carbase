@@ -1,7 +1,7 @@
-package pl.carsoft.carbase.repository;
+package pl.carsoft.carbase.carsharingservice.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import pl.carsoft.carbase.entity.SharedCar;
+import pl.carsoft.carbase.carsharingservice.entity.SharedCar;
 
 public interface CarShareRepository extends CrudRepository<SharedCar, Long> {
 }

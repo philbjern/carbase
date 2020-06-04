@@ -1,4 +1,4 @@
-package pl.carsoft.carbase.entity;
+package pl.carsoft.carbase.carservice.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

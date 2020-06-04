@@ -1,11 +1,11 @@
-package pl.carsoft.carbase.controller;
+package pl.carsoft.carbase.carservice.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.carsoft.carbase.entity.Car;
-import pl.carsoft.carbase.repository.CarRepository;
+import pl.carsoft.carbase.carservice.entity.Car;
+import pl.carsoft.carbase.carservice.repository.CarRepository;
 
 @RestController
 @RequestMapping(path = "/api/cars")

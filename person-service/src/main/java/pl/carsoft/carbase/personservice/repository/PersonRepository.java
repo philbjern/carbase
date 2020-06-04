@@ -1,7 +1,7 @@
-package pl.carsoft.carbase.repository;
+package pl.carsoft.carbase.personservice.repository;
 
 import org.springframework.data.repository.CrudRepository;
-import pl.carsoft.carbase.entity.Person;
+import pl.carsoft.carbase.personservice.entity.Person;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
 }
