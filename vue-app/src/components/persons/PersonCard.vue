@@ -4,17 +4,25 @@
       <img src="../../../static/img/user.png" alt="" class="user-image" />
       <div class="info flex-grow">
         <p class="text-bigger">{{ person.firstName }} {{ person.lastName }}</p>
-        <p class="text-bigger">{{ person.email }}</p>
+        <p>
+          <a :href="'mailto:' + person.email">{{ person.email }}</a>
+        </p>
+        <p v-if="person.registeredOn">
+          Carbase user since
+          {{ this.getTimeSinceRegistered(person.registeredOn) }}
+        </p>
         <p>
           Number of cars
-          <span class="text-bigger">{{ person.cars.length }}</span>
+          <span class="text-bigger">{{ person.carsList.length }}</span>
         </p>
-        <p>Cars</p>
-        <ul>
-          <li v-for="(car, idx) in person.cars" :key="idx">
-            {{ car.make }} {{ car.model }}
-          </li>
-        </ul>
+        <div v-if="person.carsList.length > 0">
+          <p>Cars</p>
+          <ul>
+            <li v-for="(car, idx) in person.carsList" :key="idx">
+              {{ car.make }} {{ car.model }}
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
     <div class="row flex-end">
@@ -31,6 +39,21 @@
 
 <script>
 import { getNotification, scrollTop } from "../../utils";
+
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December"
+];
 
 export default {
   props: ["person"],
@@ -56,6 +79,18 @@ export default {
           );
         }
       );
+    },
+    getTimeSinceRegistered(timestamp) {
+      if (timestamp != null) {
+        const registrationDate = new Date(Date.parse(timestamp));
+        console.log(registrationDate);
+        return (
+          monthNames[registrationDate.getMonth() - 1] +
+          " " +
+          registrationDate.getFullYear()
+        );
+      }
+      return "unknown";
     }
   }
 };

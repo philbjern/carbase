@@ -20,23 +20,15 @@
 import Header from "./components/Header.vue";
 import Notifications from "./components/Notifications.vue";
 
-const NOTIFICATION_TIMEOUT = 4000;
+const NOTIFICATION_TIMEOUT = 3000;
 
 export default {
   data() {
     return {
-      notifications: [
-        {
-          type: "error",
-          message: "Error occured while deleting person"
-        },
-        {
-          type: "success",
-          message: "Successfully edited car info"
-        }
-      ]
+      notifications: []
     };
   },
+  created() {},
   components: {
     appHeader: Header,
     appNotifications: Notifications
@@ -47,10 +39,11 @@ export default {
     },
     notify(notification) {
       this.notifications.push(notification);
-      // const id = this.notifications.length - 1;
-      // setTimeout(() => {
-      //   this.removeNotification(id);
-      // }, NOTIFICATION_TIMEOUT);
+      const timeout = setTimeout(() => {
+        // clear notifications
+        this.notifications = this.notifications.filter(n => n != notification);
+        clearTimeout(timeout);
+      }, NOTIFICATION_TIMEOUT);
     }
   }
 };
@@ -84,6 +77,18 @@ h6 {
 
 p {
   line-height: 1.5rem;
+}
+
+.mt-1 {
+  margin: 1rem 0 0 0 !important;
+}
+
+.mt-3 {
+  margin: 3rem 0 0 0 !important;
+}
+
+.my-3 {
+  margin: 3rem 0 3rem 0 !important;
 }
 
 .app-body {
@@ -186,7 +191,7 @@ p {
 }
 
 a {
-  color: inherit;
+  color: #011936;
 }
 
 .footer {
@@ -260,6 +265,8 @@ a {
   color: black;
 }
 
+/** Delete from here */
+
 .form input {
   border: 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
@@ -300,5 +307,64 @@ a {
   width: 10px;
   height: 10px;
   background: black;
+}
+/** to here */
+
+.form input {
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+  padding: 0.5rem 0.5rem;
+  font-size: 1rem;
+  width: 100%;
+}
+
+.form select {
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+  background: white;
+  font-size: 1rem;
+}
+
+.form select option {
+  padding: 0.5rem 0.5rem;
+}
+
+.form-wrapper {
+  width: 60%;
+  margin: auto;
+  min-width: 600px;
+}
+
+.form {
+  margin-top: 3em;
+}
+
+.form h2 {
+  font-family: Roboto, sans-serif;
+  font-size: 1.1rem;
+}
+
+.form .row {
+  margin: 2em 0 2em 0;
+}
+
+.btn-wide {
+  width: 100%;
+}
+
+input.error {
+  border-color: lightcoral;
+}
+
+select.error {
+  border-color: lightcoral;
+}
+
+.error-message {
+  color: lightcoral;
 }
 </style>

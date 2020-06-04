@@ -29,7 +29,7 @@
 
     <h1 class="text-center mt-3">About Carbase</h1>
     <div class="narrow">
-      <i class="fa fa-road car-bg"></i>
+      <!-- <i class="fa fa-road car-bg"></i> -->
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed
         faucibus sem. Mauris quis neque vestibulum, ullamcorper enim nec, ornare

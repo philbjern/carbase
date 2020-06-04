@@ -23,7 +23,7 @@
           <td>{{ car.make }}</td>
           <td>{{ car.model }}</td>
           <td>{{ car.productionYear }}</td>
-          <td>{{ car.fuel.toLowerCase() }}</td>
+          <td>{{ car.fuelType.toLowerCase() }}</td>
           <td>{{ car.engineVolume }}L</td>
           <td>
             <button class="btn" @click="editCar(car.id)">Edit Car</button>
@@ -111,4 +111,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+tr:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+</style>

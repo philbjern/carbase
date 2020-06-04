@@ -1,105 +1,150 @@
 <template>
   <div class="container content-wrapper">
-    <h1 v-if="this.$route.params.id">Edit Car Info</h1>
-    <h1 v-else>New Car</h1>
-    <div class="row mt-3 mb-3">
+    <div class="form-wrapper">
+      <h1 v-if="this.$route.params.id">Edit Car Info</h1>
+      <h1 v-else>Add New Car</h1>
       <form class="form">
-        <table class="margin-auto">
-          <tbody>
-            <tr>
-              <td class="fix-width">Make</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="car.make"
-                  :class="{
-                    'missing-field': this.validation.includes('make')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Model</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="car.model"
-                  :class="{
-                    'missing-field': this.validation.includes('model')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Production Year</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="car.productionYear"
-                  :class="{
-                    'missing-field': this.validation.includes('productionYear')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Fuel</td>
-              <td>
-                <select
-                  v-model="car.fuel"
-                  :class="{
-                    'missing-field': this.validation.includes('fuel')
-                  }"
-                >
-                  <option value="0">Select fuel type</option>
-                  <option value="DIESEL">Diesel</option>
-                  <option value="PETROL">Petrol</option>
-                  <option value="PETROL_LPG">Petrol+LPG</option>
-                  <option value="ELECTRIC">Electric</option>
-                </select>
-              </td>
-            </tr>
-            <tr>
-              <td>Engine Volume</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="car.engineVolume"
-                  :class="{
-                    'missing-field': this.validation.includes('engineVolume')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" class="text-center">
-                <button
-                  class="btn"
-                  @click.prevent="editCarPostRequest"
-                  v-if="this.$route.params.id"
-                >
-                  Edit Car
-                </button>
-                <button class="btn" @click.prevent="newCarPostRequest" v-else>
-                  Add Car
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="row">
+          <h2>Manufacturer</h2>
+          <input
+            type="text"
+            v-model="car.make"
+            :class="{
+              error: this.validationMessages.make.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.make.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in validationMessages.make"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Model</h2>
+          <input
+            type="text"
+            v-model="car.model"
+            :class="{
+              error: this.validationMessages.model.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.model.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in validationMessages.model"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Production Year</h2>
+          <input
+            type="text"
+            v-model="car.productionYear"
+            :class="{
+              error: this.validationMessages.productionYear.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.productionYear.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in validationMessages.productionYear"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Fuel</h2>
+          <select
+            v-model="car.fuelType"
+            :class="{
+              error: this.validationMessages.fuel.length > 0
+            }"
+          >
+            <option value="0">Select fuel type</option>
+            <option value="DIESEL">Diesel</option>
+            <option value="PETROL">Petrol</option>
+            <option value="PETROL_LPG">Petrol+LPG</option>
+            <option value="HYBRID">Hybrid</option>
+            <option value="ELECTRIC">Electric</option>
+          </select>
+          <div v-if="this.validationMessages.fuel.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in validationMessages.fuel"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Engine Volume</h2>
+          <input
+            type="text"
+            v-model="car.engineVolume"
+            :class="{
+              error: this.validationMessages.engineVolume.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.engineVolume.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in validationMessages.engineVolume"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <button
+            class="btn btn-wide"
+            @click.prevent="editCarPostRequest"
+            v-if="this.$route.params.id"
+          >
+            Edit Car
+          </button>
+          <button
+            class="btn btn-wide"
+            @click.prevent="newCarPostRequest"
+            v-else
+          >
+            Add Car
+          </button>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script>
-import { contains, getNotification } from "../../utils";
+import { getNotification } from "../../utils";
 
 export default {
   data() {
     return {
       car: {},
-      validation: []
+      validationMessages: {
+        make: [],
+        model: [],
+        productionYear: [],
+        fuel: [],
+        engineVolume: []
+      }
     };
   },
   created() {
@@ -110,12 +155,29 @@ export default {
         make: "",
         model: "",
         productionYear: "",
-        fuel: 0,
+        fuelType: 0,
         engineVolume: ""
       };
     }
   },
   methods: {
+    clearValidationMessages() {
+      this.validationMessages = {
+        make: [],
+        model: [],
+        productionYear: [],
+        fuel: [],
+        engineVolume: []
+      };
+    },
+    isFormValid(messages) {
+      for (const key in messages) {
+        if (messages[key].length != 0) {
+          return false;
+        }
+      }
+      return true;
+    },
     fetchCarData() {
       const url = `cars/${this.$route.params.id}`;
       this.$http
@@ -133,40 +195,48 @@ export default {
         );
     },
     validate() {
-      this.validation = [];
+      this.clearValidationMessages();
       if (this.car.make === "") {
-        this.validation.push("make");
-        this.$emit("notify", getNotification("error", "Missing field: Make"));
+        this.validationMessages.make.push("This field is required");
       }
       if (this.car.model === "") {
-        this.validation.push("model");
-        this.$emit("notify", getNotification("error", "Missing field: Model"));
+        this.validationMessages.model.push("This field is required");
       }
       if (this.car.productionYear === "") {
-        this.validation.push("productionYear");
-        this.$emit(
-          "notify",
-          getNotification("error", "Missing field: Production Year")
-        );
+        this.validationMessages.productionYear.push("This field is required");
+      } else {
+        const year = this.car.productionYear.split("");
+        if (year.length != 4) {
+          this.validationMessages.productionYear.push(
+            "Production year must be 4 digits"
+          );
+        }
+        for (const digit of year) {
+          if (!Number.isInteger(parseInt(digit))) {
+            this.validationMessages.productionYear.push(
+              "Production year must contain only digits"
+            );
+            break;
+          }
+        }
       }
+
       if (this.car.fuel == "0") {
-        this.validation.push("fuel");
-        this.$emit(
-          "notify",
-          getNotification("error", "Missing field: Fuel Type")
-        );
+        this.validationMessages.fuel.push("This field is required");
       }
       if (this.car.engineVolume === "") {
-        this.validation.push("engineVolume");
-        this.$emit(
-          "notify",
-          getNotification("error", "Missing field: Engine Volume")
-        );
+        this.validationMessages.engineVolume.push("This field is required");
+      } else {
+        const value = this.car.engineVolume;
+        console.log(parseFloat(value));
+        if (isNaN(parseFloat(value))) {
+          this.validationMessages.engineVolume.push(
+            "Engine volume must be a number"
+          );
+        }
       }
-      if (this.validation.length === 0) {
-        return true;
-      }
-      return false;
+
+      return this.isFormValid(this.validationMessages);
     },
     editCarPostRequest() {
       if (this.validate()) {
@@ -217,5 +287,54 @@ export default {
 <style scoped>
 .form select {
   width: 100%;
+  padding: 0.5rem 0.5rem;
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form select option {
+  padding: 0.5rem 0.5rem;
+}
+
+.form-wrapper {
+  width: 60%;
+  margin: auto;
+  min-width: 600px;
+}
+
+.form {
+  margin-top: 3em;
+}
+
+.form h2 {
+  font-family: Roboto, sans-serif;
+  font-size: 1.1rem;
+}
+
+.form input {
+  border: 2px solid rgba(0, 0, 0, 0.08);
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+}
+
+.form .row {
+  margin: 2em 0 2em 0;
+}
+
+.form button {
+  width: 100%;
+}
+
+input.error {
+  border-color: lightcoral;
+}
+
+select.error {
+  border-color: lightcoral;
+}
+
+.error-message {
+  color: lightcoral;
 }
 </style>

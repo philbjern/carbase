@@ -1,8 +1,8 @@
 <template>
-  <div class="row shadow bg-white">
+  <div class="row bg-white">
     <div class="container navbar">
       <h1 class="title">Carbase</h1>
-      <i class="fa fa-car"></i>
+      <!-- <i class="fa fa-car"></i> -->
       <ul class="nav">
         <router-link to="/" tag="li" exact>Home</router-link>
         <router-link to="/persons" tag="li">Persons</router-link>
@@ -20,7 +20,7 @@ export default {};
 .title {
   font-size: 3rem;
   font-weight: lighter;
-  margin: 0 1rem 0 0;
+  margin: 0 1rem 0 0.5rem;
 }
 
 .bg-white {

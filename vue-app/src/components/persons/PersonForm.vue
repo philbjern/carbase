@@ -1,106 +1,123 @@
 <template>
   <div class="container content-wrapper">
-    <h1 v-if="this.$route.params.id">Edit Person Profile</h1>
-    <h1 v-else>New Person</h1>
-    <div class="row mt-3 mb-3">
+    <div class="form-wrapper">
+      <h1 v-if="this.$route.params.id">Edit Person Profile</h1>
+      <h1 v-else>Add New Person</h1>
       <form class="form">
-        <table class="margin-auto">
-          <tbody>
-            <tr>
-              <td class="fix-width">First Name</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="person.firstName"
-                  :class="{
-                    'missing-field': this.validation.includes('firstName')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Last Name</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="person.lastName"
-                  :class="{
-                    'missing-field': this.validation.includes('lastName')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Email</td>
-              <td>
-                <input
-                  type="text"
-                  v-model="person.email"
-                  :class="{
-                    'missing-field': this.validation.includes('email')
-                  }"
-                />
-              </td>
-            </tr>
-            <tr>
-              <td>Cars</td>
-              <td class="flex">
-                <select
-                  name=""
-                  id=""
-                  class="flex-grow"
-                  value="0"
-                  v-model="carToAddId"
-                >
-                  <option value="0">Select Car</option>
-                  <option
-                    v-for="(car, idx) in availableCars"
-                    :key="idx"
-                    :value="car.id"
-                    >{{ car.make }} {{ car.model }} - {{ car.productionYear }},
-                    {{ car.engineVolume }}L</option
-                  >
-                </select>
-                <button class="btn" @click.prevent="addCar()">
-                  Add Car
-                </button>
-              </td>
-            </tr>
-            <tr>
-              <td></td>
-              <td>
-                <div
-                  class="pill"
-                  v-for="(car, index) in person.cars"
-                  :key="index"
-                >
-                  {{ car.make }} {{ car.model }}
-                  <i class="fa fa-times-circle" @click="removeCar(car.id)"></i>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="2" class="text-center">
-                <button
-                  class="btn"
-                  @click.prevent="editPerson"
-                  v-if="this.$route.params.id"
-                >
-                  Edit Person
-                </button>
-                <button class="btn" @click.prevent="addPerson" v-else>
-                  Add Person
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <div class="row">
+          <h2>First Name</h2>
+          <input
+            type="text"
+            v-model="person.firstName"
+            :class="{
+              error: this.validationMessages.firstName.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.firstName.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in this.validationMessages.firstName"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Last Name</h2>
+          <input
+            type="text"
+            v-model="person.lastName"
+            :class="{
+              error: this.validationMessages.lastName.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.lastName.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in this.validationMessages.lastName"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Email</h2>
+          <input
+            type="text"
+            v-model="person.email"
+            :class="{
+              error: this.validationMessages.email.length > 0
+            }"
+          />
+          <div v-if="this.validationMessages.email.length > 0">
+            <p
+              class="error-message"
+              v-for="(message, i) in this.validationMessages.email"
+              :key="i"
+            >
+              {{ message }}
+            </p>
+          </div>
+        </div>
+
+        <div class="row">
+          <h2>Cars</h2>
+          <div class="flex-container">
+            <select
+              name=""
+              id=""
+              class="flex-grow"
+              value="0"
+              v-model="carToAddId"
+            >
+              <option value="0">Select Car</option>
+              <option
+                v-for="(car, idx) in availableCars"
+                :key="idx"
+                :value="car.id"
+                >{{ car.make }} {{ car.model }} - {{ car.productionYear }},
+                {{ car.engineVolume }}L</option
+              >
+            </select>
+            <button class="btn flex-shrink" @click.prevent="addCar()">
+              Add Car
+            </button>
+          </div>
+          <div class="row">
+            <div
+              class="pill"
+              v-for="(car, index) in person.carsList"
+              :key="index"
+            >
+              {{ car.make }} {{ car.model }}
+              <i class="fa fa-times-circle" @click="removeCar(car.id)"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="row my-3">
+          <button
+            class="btn btn-wide"
+            @click.prevent="editPerson"
+            v-if="this.$route.params.id"
+          >
+            Edit Person
+          </button>
+          <button class="btn btn-wide" @click.prevent="addPerson" v-else>
+            Add Person
+          </button>
+        </div>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+//TODO: change to actually use vuelidate
 import { contains, getNotification } from "../../utils";
 
 export default {
@@ -109,14 +126,19 @@ export default {
       person: {},
       cars: [],
       carToAddId: 0,
-      validation: []
+      validation: [],
+      validationMessages: {
+        firstName: [],
+        lastName: [],
+        email: []
+      }
     };
   },
   computed: {
     availableCars() {
       let result = [];
       for (let car of this.cars) {
-        if (!contains(this.person.cars, car.id)) {
+        if (!contains(this.person.carsList, car.id)) {
           result.push(car);
         }
       }
@@ -127,7 +149,7 @@ export default {
     if (this.$route.params.id) {
       this.fetchPersonData();
     } else {
-      this.person = { firstName: "", lastName: "", email: "", cars: [] };
+      this.person = { firstName: "", lastName: "", email: "", carsList: [] };
     }
     this.fetchAllCars();
   },
@@ -174,46 +196,55 @@ export default {
     addCar() {
       let car = this.getCar(this.carToAddId, this.availableCars);
       if (car.id) {
-        this.person.cars.push(car);
+        this.person.carsList.push(car);
         this.carToAddId = 0;
       }
     },
     removeCar(id) {
       let indexToRemove = -1;
-      for (let i = 0; i < this.person.cars.length; i++) {
-        if (this.person.cars[i].id === id) {
+      for (let i = 0; i < this.person.carsList.length; i++) {
+        if (this.person.carsList[i].id === id) {
           indexToRemove = i;
           break;
         }
       }
       if (indexToRemove >= 0) {
-        this.person.cars.splice(indexToRemove, 1);
+        this.person.carsList.splice(indexToRemove, 1);
       }
+    },
+    clearValidationMessages() {
+      this.validationMessages = {
+        firstName: [],
+        lastName: [],
+        email: []
+      };
+    },
+    isFormValid() {
+      for (const field in this.validationMessages) {
+        if (this.validationMessages[field].length > 0) {
+          return false;
+        }
+      }
+      return true;
     },
     validate() {
       this.validation = [];
+      this.clearValidationMessages();
       if (this.person.firstName === "") {
         this.validation.push("firstName");
-        this.$emit(
-          "notify",
-          getNotification("error", "Missing field: First Name")
-        );
+        this.validationMessages.firstName.push("First name is required");
       }
       if (this.person.lastName === "") {
         this.validation.push("lastName");
-        this.$emit(
-          "notify",
-          getNotification("error", "Missing field: Last Name")
-        );
+        this.validationMessages.lastName.push("Last name is required");
       }
       if (this.person.email === "") {
         this.validation.push("email");
-        this.$emit("notify", getNotification("error", "Missing field: Email"));
+        this.validationMessages.email.push("Email is required");
       }
-      if (this.validation.length === 0) {
-        return true;
-      }
-      return false;
+
+      console.log("isFormValid: " + this.isFormValid());
+      return this.isFormValid();
     },
     editPerson() {
       if (this.validate()) {
@@ -260,3 +291,21 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.flex-container {
+  display: flex;
+}
+
+.flex-container select {
+  width: auto;
+}
+
+.flex-grow {
+  flex: 1 0 auto;
+}
+
+.flex-shrink {
+  flex: 0 1 auto;
+}
+</style>
