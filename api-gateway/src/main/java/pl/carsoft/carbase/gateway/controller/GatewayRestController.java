@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import pl.carsoft.carbase.gateway.client.CarClient;
+import pl.carsoft.carbase.gateway.client.CarShare;
 import pl.carsoft.carbase.gateway.client.PersonClient;
 import pl.carsoft.carbase.gateway.entity.Car;
 import pl.carsoft.carbase.gateway.entity.Person;
@@ -29,6 +30,9 @@ public class GatewayRestController {
 
     @Autowired
     CarClient carClient;
+
+    @Autowired
+    CarShare carShareClient;
 
     @GetMapping(path = "test")
     public String test() {
@@ -65,8 +69,8 @@ public class GatewayRestController {
             }
             return new ResponseEntity<>("Person not found", HttpStatus.NOT_FOUND);
         } catch (RestClientException e) {
-          LOGGER.info("Cannot reach service, " + e.getMessage());
-          return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
+            LOGGER.info("Cannot reach service, " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
@@ -97,6 +101,110 @@ public class GatewayRestController {
         } catch (RestClientException e) {
             LOGGER.info("Cannot reach service, " + e.getMessage());
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.SERVICE_UNAVAILABLE);
+        }
+    }
+
+    @RequestMapping(path = "persons", method = RequestMethod.POST)
+    public ResponseEntity<?> createPerson(@RequestBody Person person) {
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            // Save person
+            Person result = personClient.save(person);
+            if (result != null) {
+                // Save person cars
+                // create non existing cars
+                if (person.getCarsList() != null) {
+                    person.getCarsList().forEach(car -> {
+                        Long carId;
+                        if (car.getId() == null) {
+                            // create new car
+                            Car newCar = carClient.save(car);
+                            System.out.println(newCar);
+                            carId = newCar.getId();
+                        } else {
+                            // car exists
+                            carId = car.getId();
+                        }
+                        carShareClient.save(result.getId(), carId);
+                    });
+                }
+                return new ResponseEntity<>(this.findPersonById(result.getId()).getBody(), HttpStatus.CREATED);
+            } else {
+                return new ResponseEntity<>("Person not created", HttpStatus.NOT_MODIFIED);
+            }
+        } catch (RestClientException e) {
+            LOGGER.info("Could not create person. " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "cars", method = RequestMethod.POST)
+    public ResponseEntity<?> createCar(@RequestBody Car car) {
+        if (car == null) {
+            return new ResponseEntity<>("Request body must not be empty", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            carClient.save(car);
+        } catch (RestClientException e) {
+            LOGGER.info("Could not create car. " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>("Car successfully created", HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "persons/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updatePerson(@PathVariable("id") Long personId, @RequestBody Person person) {
+        if (person == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (personClient.findPersonById(personId) == null) {
+            return new ResponseEntity<>("Person doesn't exist", HttpStatus.NOT_FOUND);
+        }
+
+        try {
+            personClient.updatePerson(person);
+        } catch (RestClientException e) {
+            LOGGER.info("Update person error: Could not update person info. " + e.getMessage());
+            return new ResponseEntity<>("Update person error: Could not update person info.",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try {
+            carShareClient.updatePersonCars(personId, person.getCarsList());
+        } catch (RestClientException e) {
+            LOGGER.info("Update person error: Could not update person cars information. " + e.getMessage());
+            return new ResponseEntity<>("Update person error: Could not update person cars info.",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "cars/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateCar(@PathVariable("id") Long carId, @RequestBody Car car) {
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+    }
+
+    @RequestMapping(path = "persons/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deletePerson(@PathVariable("id") Long personId) {
+        try {
+            personClient.deleteById(personId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RestClientException e) {
+            LOGGER.info("Could not delete person. " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @RequestMapping(path = "cars/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deleteCar(@PathVariable("id") Long carId) {
+        try {
+            carClient.deleteById(carId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (RestClientException e) {
+            LOGGER.info("Could not delete car. " + e.getMessage());
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

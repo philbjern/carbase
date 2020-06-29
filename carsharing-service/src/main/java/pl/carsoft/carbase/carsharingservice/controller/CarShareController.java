@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.carsoft.carbase.carsharingservice.entity.SharedCar;
 import pl.carsoft.carbase.carsharingservice.repository.CarShareRepository;
 import pl.carsoft.carbase.carsharingservice.service.CarService;
@@ -150,4 +147,46 @@ public class CarShareController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @RequestMapping(path = "persons/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> removePersonCarShares(@PathVariable("id") Long personId) {
+        carShareRepository.findAll().forEach(carShare -> {
+            if (carShare.getPersonId().equals(personId)) {
+                carShareRepository.delete(carShare);
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/cars/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> removeCarsFromPerson(@PathVariable("id") Long carId) {
+        carShareRepository.findAll().forEach(carShare -> {
+            if (carShare.getCarId().equals(carId)) {
+                carShareRepository.delete(carShare);
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(path = "/persons/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updatePersonsCars(@PathVariable("id") Long personId, @RequestBody List<Long> carIds) {
+        // remove SharedCar entries for cars not in updated cars list
+        carShareRepository.findAll().forEach(sharedCar -> {
+            if (sharedCar.getPersonId().equals(personId)) {
+                if (!carIds.contains(sharedCar.getCarId())) {
+                    // car was removed, delete entry from repository
+                    carShareRepository.delete(sharedCar);
+                }
+                // car was removed or not added, delete carId from list
+                carIds.remove(sharedCar.getCarId());
+            }
+        });
+
+        // create new SharedCar entires for remaining (new) cars ids in carIds list
+        if (!carIds.isEmpty()) {
+            for (Long carId : carIds) {
+                carShareRepository.save(new SharedCar(carId, personId));
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

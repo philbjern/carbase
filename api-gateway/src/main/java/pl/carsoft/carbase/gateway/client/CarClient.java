@@ -39,7 +39,7 @@ public class CarClient {
     }
 
     /**
-     * Calls CarShareService for list of {@link Car}s used by a {@link Person} with {@param personId}
+     * Calls CarShareService for list of {@link Car}s used by a person with {@param personId}
      * @param personId id of a person whose cars are search for
      * @return list of cars used by a person
      * @throws RestClientException when service is unreachable
@@ -61,5 +61,19 @@ public class CarClient {
             return response.getBody();
         }
         return null;
+    }
+
+    public Car save(Car car) {
+        ResponseEntity<Car> response = restTemplate.postForEntity(carServiceURL + "/api/cars", car, Car.class);
+        if (response.getStatusCode().equals(HttpStatus.CREATED)) {
+            return response.getBody();
+        }
+        return null;
+    }
+
+    public void deleteById(Long carId) {
+        restTemplate.delete(carServiceURL + "/api/cars/" + carId);
+        // delete car share entries
+        restTemplate.delete(carShareServiceURL + "/api/cars/" + carId);
     }
 }
