@@ -1,5 +1,27 @@
 <template>
   <div class="card" v-if="person">
+    <modal
+      :name="'delete-person-modal-' + person.id"
+      :width="400"
+      :height="200"
+    >
+      <div class="p-2 flex-column" style="height: 100%;">
+        <h2>Confirm</h2>
+        <div class="flex-grow">
+          <p class="my-1">
+            Are you sure you want to delete person
+            <b>{{ person.firstName + " " + person.lastName }}</b
+            >?
+          </p>
+        </div>
+        <div class="text-right">
+          <button @click="hideDeleteModal" class="btn btn-light">Cancel</button>
+          <button @click="deletionConfirmed" class="btn btn-danger">
+            Delete
+          </button>
+        </div>
+      </div>
+    </modal>
     <div class="row">
       <img src="../../../static/img/user.png" alt="" class="user-image" />
       <div class="info flex-grow">
@@ -9,7 +31,7 @@
         </p>
         <p v-if="person.registeredOn">
           Carbase user since
-          {{ this.getTimeSinceRegistered(person.registeredOn) }}
+          {{ getTimeSinceRegistered(person.registeredOn) }}
         </p>
         <p>
           Number of cars
@@ -17,7 +39,7 @@
         </p>
         <div v-if="person.carsList.length > 0">
           <p>Cars</p>
-          <ul>
+          <ul class="car-list">
             <li v-for="(car, idx) in person.carsList" :key="idx">
               {{ car.make }} {{ car.model }}
             </li>
@@ -28,7 +50,7 @@
     <div class="row flex-end">
       <div class="buttons">
         <button class="btn" @click="editProfile">Edit Profile</button>
-        <button class="btn" @click="deletePerson">Delete Person</button>
+        <button class="btn" @click="showDeleteModal">Delete Person</button>
       </div>
     </div>
   </div>
@@ -39,6 +61,7 @@
 
 <script>
 import { getNotification, scrollTop } from "../../utils";
+import VModal from "vue-js-modal";
 
 const monthNames = [
   "January",
@@ -57,12 +80,24 @@ const monthNames = [
 
 export default {
   props: ["person"],
+
   methods: {
     editProfile() {
       this.$router.push({ path: `/persons/${this.person.id}` });
     },
+    showDeleteModal() {
+      this.$modal.show("delete-person-modal-" + this.person.id);
+    },
+    hideDeleteModal() {
+      this.$modal.hide("delete-person-modal-" + this.person.id);
+    },
+    deletionConfirmed() {
+      this.hideDeleteModal();
+      this.deletePerson();
+    },
     deletePerson() {
       const url = `persons/${this.person.id}`;
+      console.log(url);
       this.$http.delete(url).then(
         () => {
           this.$emit(
@@ -83,9 +118,10 @@ export default {
     getTimeSinceRegistered(timestamp) {
       if (timestamp != null) {
         const registrationDate = new Date(Date.parse(timestamp));
-        console.log(registrationDate);
         return (
-          monthNames[registrationDate.getMonth() - 1] +
+          registrationDate.getDate() +
+          " " +
+          monthNames[registrationDate.getMonth()] +
           " " +
           registrationDate.getFullYear()
         );
@@ -116,7 +152,7 @@ td {
 }
 
 .card {
-  max-width: 70%;
+  max-width: 60%;
   margin: 1.5rem auto;
   padding: 1rem;
   border: 5px solid #f9dc5c;
@@ -136,5 +172,11 @@ td {
   .card {
     max-width: 100%;
   }
+}
+
+.car-list {
+  margin: 0;
+  padding: 0 0 0 1rem;
+  list-style: none;
 }
 </style>

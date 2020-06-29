@@ -5,7 +5,7 @@
       <h1 v-else>Add New Person</h1>
       <form class="form">
         <div class="row">
-          <h2>First Name</h2>
+          <h2 class="mb-1">First Name</h2>
           <input
             type="text"
             v-model="person.firstName"
@@ -25,7 +25,7 @@
         </div>
 
         <div class="row">
-          <h2>Last Name</h2>
+          <h2 class="mb-1">Last Name</h2>
           <input
             type="text"
             v-model="person.lastName"
@@ -45,7 +45,7 @@
         </div>
 
         <div class="row">
-          <h2>Email</h2>
+          <h2 class="mb-1">Email</h2>
           <input
             type="text"
             v-model="person.email"
@@ -65,7 +65,7 @@
         </div>
 
         <div class="row">
-          <h2>Cars</h2>
+          <h2 class="mb-1">Cars</h2>
           <div class="flex-container">
             <select
               name=""
@@ -99,7 +99,7 @@
           </div>
         </div>
 
-        <div class="row my-3">
+        <div class="row my-4">
           <button
             class="btn btn-wide"
             @click.prevent="editPerson"
@@ -249,7 +249,7 @@ export default {
     editPerson() {
       if (this.validate()) {
         const url = `persons/${this.person.id}`;
-        this.$http.put("persons", this.person).then(
+        this.$http.put(url, this.person).then(
           success => {
             this.$emit(
               "notify",
