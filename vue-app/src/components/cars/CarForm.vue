@@ -5,7 +5,7 @@
       <h1 v-else>Add New Car</h1>
       <form class="form">
         <div class="row">
-          <h2>Manufacturer</h2>
+          <h2 class="mb-1">Manufacturer</h2>
           <input
             type="text"
             v-model="car.make"
@@ -25,7 +25,7 @@
         </div>
 
         <div class="row">
-          <h2>Model</h2>
+          <h2 class="mb-1">Model</h2>
           <input
             type="text"
             v-model="car.model"
@@ -45,7 +45,7 @@
         </div>
 
         <div class="row">
-          <h2>Production Year</h2>
+          <h2 class="mb-1">Production Year</h2>
           <input
             type="text"
             v-model="car.productionYear"
@@ -65,7 +65,7 @@
         </div>
 
         <div class="row">
-          <h2>Fuel</h2>
+          <h2 class="mb-1">Fuel</h2>
           <select
             v-model="car.fuelType"
             :class="{
@@ -91,7 +91,7 @@
         </div>
 
         <div class="row">
-          <h2>Engine Volume</h2>
+          <h2 class="mb-1">Engine Volume</h2>
           <input
             type="text"
             v-model="car.engineVolume"
@@ -110,7 +110,7 @@
           </div>
         </div>
 
-        <div class="row">
+        <div class="row my-4">
           <button
             class="btn btn-wide"
             @click.prevent="editCarPostRequest"
@@ -123,7 +123,7 @@
             @click.prevent="newCarPostRequest"
             v-else
           >
-            Add Car
+            Add New Car
           </button>
         </div>
       </form>
@@ -221,7 +221,7 @@ export default {
         }
       }
 
-      if (this.car.fuel == "0") {
+      if (this.car.fuelType == "0") {
         this.validationMessages.fuel.push("This field is required");
       }
       if (this.car.engineVolume === "") {

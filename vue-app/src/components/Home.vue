@@ -1,10 +1,10 @@
 <template>
   <div class="container content-wrapper">
-    <h1>Welcome to Carbase</h1>
+    <!-- <h1>Welcome to Carbase</h1>
     <p>
       Choose persons to see table of car users, or cars to see list of all cars
       available for rent.
-    </p>
+    </p> -->
 
     <div class="cards">
       <router-link to="/persons" tag="div" class="card">
@@ -70,7 +70,6 @@ export default {};
 
 <style scoped>
 .cards {
-  margin-top: 2rem;
   display: flex;
 }
 

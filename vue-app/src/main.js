@@ -4,6 +4,7 @@ import VueResource from "vue-resource";
 import App from "./App.vue";
 import { routes } from "./routes";
 import { config } from "./config";
+import VModal from "vue-js-modal";
 
 Vue.use(VueRouter);
 const router = new VueRouter({
@@ -13,6 +14,8 @@ const router = new VueRouter({
 
 Vue.use(VueResource);
 Vue.http.options.root = config.apiBaseUrl;
+
+Vue.use(VModal);
 
 new Vue({
   el: "#app",

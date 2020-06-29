@@ -18,7 +18,7 @@ export default {};
 
 <style scoped>
 .title {
-  font-size: 3rem;
+  font-size: 2.2rem;
   font-weight: lighter;
   margin: 0 1rem 0 0.5rem;
 }

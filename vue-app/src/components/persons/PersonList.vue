@@ -1,6 +1,6 @@
 <template>
   <div class="container content-wrapper">
-    <h1>Person List</h1>
+    <h1>Car users list</h1>
     <p>List of all carbase users</p>
     <router-link to="persons/new">
       <button class="btn">Add New Person</button>

@@ -7,7 +7,7 @@
         @notificationremoved="removeNotification($event)"
       ></app-notifications>
       <transition name="fade" mode="out-in">
-        <router-view @notify="notify($event)"></router-view>
+        <router-view @notify="notify($event)" ref="routerView"></router-view>
       </transition>
     </div>
     <footer class="footer">
@@ -71,7 +71,7 @@ h4,
 h5,
 h6 {
   font-family: "Playfair Display", serif;
-  margin: 1rem 0;
+  margin: 0;
   font-weight: lighter;
 }
 
@@ -87,8 +87,40 @@ p {
   margin: 3rem 0 0 0 !important;
 }
 
+.mb-1 {
+  margin: 0 0 1rem 0;
+}
+
 .my-3 {
   margin: 3rem 0 3rem 0 !important;
+}
+
+.my-4 {
+  margin: 4rem 0 4rem 0 !important;
+}
+
+.mt-3 {
+  margin-top: 3rem;
+}
+
+.mb-3 {
+  margin-bottom: 3rem;
+}
+
+.my-1 {
+  margin: 1rem 0 1rem 0;
+}
+
+.p-1 {
+  padding: 1rem;
+}
+
+.p-2 {
+  padding: 2rem;
+}
+
+.p-3 {
+  padding: 3rem;
 }
 
 .app-body {
@@ -103,7 +135,7 @@ p {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05);
-  padding: 1rem 2rem;
+  padding: 2rem;
 }
 
 .container {
@@ -128,8 +160,16 @@ p {
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
+.text-gray {
+  color: rgba(0, 0, 0, 0.65);
+}
+
 .btn {
-  color: #c21f40;
+  color: #000;
   background: #f9dc5c;
   font-size: 1rem;
   padding: 0.75rem 1rem;
@@ -141,10 +181,29 @@ p {
 }
 
 .btn:hover {
-  background: rgba(0, 0, 0, 0.12);
-  color: #ed254e;
+  background: #f5f23d;
+  color: rgba(0, 0, 0, 0.6);
 }
 
+.btn-primary {
+  background: #f9dc5c;
+}
+
+.btn-secondary {
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.btn-light {
+  background: #fff;
+}
+
+.btn-danger {
+  background: #ed254e;
+}
+
+.btn-success {
+  background: lightgreen;
+}
 .fade-enter {
   opacity: 0;
 }
@@ -158,6 +217,25 @@ p {
   transition: opacity 0.5s;
 }
 
+.fade-slide-up-enter {
+  opacity: 0;
+  transform: translateY(25px);
+}
+
+.fade-slide-up-enter-active {
+  transform: translateY(0);
+  transition: all 0.25s;
+}
+
+.fade-slide-up-leave {
+}
+
+.fade-slide-up-leave-active {
+  opacity: 0;
+  transform: translateY(-25px);
+  transition: all 0.25s;
+}
+
 .table {
   width: 100%;
   border-spacing: 0;
@@ -169,9 +247,9 @@ p {
   background: #fff;
 }
 
-.table tr:nth-child(odd) {
+/* .table tr:nth-child(odd) {
   background-color: #fff8d9;
-}
+} */
 
 .table td {
   text-align: center;
@@ -209,16 +287,13 @@ a {
   text-align: justify;
 }
 
-.mt-3 {
-  margin-top: 3rem;
-}
-
-.mb-3 {
-  margin-bottom: 3rem;
-}
-
 .flex {
   display: flex;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
 }
 
 .flex-end {
