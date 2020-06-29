@@ -1,6 +1,7 @@
 package pl.carsoft.carbase.gateway.entity;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Car {
 
@@ -92,7 +93,25 @@ public class Car {
                 ", model='" + model + '\'' +
                 ", productionYear='" + productionYear + '\'' +
                 ", engineVolume='" + engineVolume + '\'' +
+                ", fuelType=" + fuelType +
+                ", ownerList=" + ownerList +
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return Objects.equals(make, car.make) &&
+                Objects.equals(model, car.model) &&
+                Objects.equals(productionYear, car.productionYear) &&
+                Objects.equals(engineVolume, car.engineVolume) &&
+                fuelType == car.fuelType;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(make, model, productionYear, engineVolume, fuelType);
+    }
 }
