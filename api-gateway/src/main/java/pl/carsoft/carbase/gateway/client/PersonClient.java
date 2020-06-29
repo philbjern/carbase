@@ -41,16 +41,8 @@ public class PersonClient {
         return Collections.emptyList();
     }
 
-    /**
-     * Calls CarShareService for list of {@link Person} users of {@link Car} with id of {@param carId}
-     *
-     * @param carId id of car which users are requested
-     * @return list of car users
-     * @throws RestClientException when service is unreachable
-     */
-    // Remove, duplicated in CarClient
-    public List<Car> findPersonCars(Long carId) throws RestClientException {
-        ResponseEntity<Car[]> response = restTemplate.getForEntity(carShareServiceURL + "/api/cars/" + carId,
+    public List<Car> findPersonCars(Long personId) throws RestClientException {
+        ResponseEntity<Car[]> response = restTemplate.getForEntity(carShareServiceURL + "/api/person/" + personId,
                 Car[].class);
         if (response.getStatusCode().equals(HttpStatus.OK)) {
             if (response.getBody() != null) {
@@ -70,6 +62,27 @@ public class PersonClient {
     }
 
     public List<Person> findCarOwners(Long id) {
+        // not implemented
         return Collections.emptyList();
+    }
+
+    public Person save(Person person) {
+        ResponseEntity<Person> response = restTemplate.postForEntity(personServiceURL + "/api/persons", person,
+                Person.class);
+        if (response.getStatusCode().equals(HttpStatus.CREATED)) {
+            return response.getBody();
+        }
+        return null;
+    }
+
+    public void deleteById(Long personId) {
+        // delete person
+        restTemplate.delete(personServiceURL + "/api/persons/" + personId);
+        // delete person's carshareing information
+        restTemplate.delete(carShareServiceURL + "/api/persons/" + personId);
+    }
+
+    public void updatePerson(Person person) {
+        restTemplate.put(personServiceURL + "/api/persons", person);
     }
 }
