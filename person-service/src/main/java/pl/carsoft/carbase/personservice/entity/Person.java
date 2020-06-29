@@ -22,7 +22,7 @@ public class Person {
     @CreationTimestamp
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
-    private Date registeredOn;
+    private Date registeredOn;  // rename to registrationDate
 
     public Person() {}
 
@@ -32,10 +32,6 @@ public class Person {
         this.email = email;
         this.registeredOn = registeredOn;
     }
-
-//    public Person(String firstName, String lastName, String email) {
-//        this(firstName, lastName, email, LocalDateTime.now());
-//    }
 
     public Long getId() {
         return id;
