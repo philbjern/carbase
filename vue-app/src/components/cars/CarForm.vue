@@ -251,6 +251,7 @@ export default {
               "notify",
               getNotification("success", "Sucessfully edited car info")
             );
+            scrollTop();
             this.rerouteToCarList();
           },
           error => {
@@ -270,6 +271,7 @@ export default {
               "notify",
               getNotification("success", "Sucessfully added new car")
             );
+            scrollTop();
             this.rerouteToCarList();
           },
           error => {

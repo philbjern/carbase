@@ -210,13 +210,13 @@ p {
   margin: 0 0.2rem 0 0.2rem;
 }
 
-.btn:hover {
-  background: #f5f23d;
-  color: rgba(0, 0, 0, 0.6);
-}
-
 .btn-primary {
   background: #f9dc5c;
+}
+
+.btn.btn-primary:hover {
+  background: #f5f23d;
+  color: rgba(0, 0, 0, 0.6);
 }
 
 .btn-secondary {
