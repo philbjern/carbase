@@ -14,7 +14,7 @@ Features:
 * Deleting users and cars
 
 ## Demo
-Demo of running web app
+App demo
 
 ![Application demo](video/showcase.gif)
 
