@@ -14,19 +14,17 @@ Features:
 * Deleting users and cars
 
 ## Demo
-Demo of running web app
+App demo
 
 ![Application demo](video/showcase.gif)
 
 ## Installation
 * Clone repository `git clone https://github.com/fbiernat/carbase.git`
 
-* Run database setup script `carbase-server/src/main/resources/carbase-setup.sql`
+* Setup MySQL database by running SQL scripts in `sql` folder
 
-* Open `carbase-server` project in IDE, and run `CarbaseApplication.java`
+* Open project in IDE, and run `PersonServiceApplication.java`, `CarServiceApplication.java`, `CarSharingApplication.java` and `GatewayApplication.java`
 
-* Go to `carbase-vue` directory and run `npm install`
+* Go to `vue-app` directory and run `npm install` and then `npm run dev` to start developement server
 
-* Run `npm run dev` to start development server
-
-* Go to web browser and open `localhost:8080` to access web application
+* Navigate to web browser and open `http://localhost:8080` to access application
