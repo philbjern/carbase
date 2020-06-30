@@ -13,22 +13,46 @@
     <footer class="footer">
       <p class="text-center">Carbase &copy; {{ new Date().getFullYear() }}</p>
     </footer>
+    <transition name="fade" mode="out-in">
+      <div class="gotop" @click="scrollUp" v-if="showGoTopButton">
+        <i class="fa fa-arrow-up"></i>
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
 import Header from "./components/Header.vue";
 import Notifications from "./components/Notifications.vue";
+import { Utils } from "./utils";
 
 const NOTIFICATION_TIMEOUT = 3000;
 
 export default {
   data() {
     return {
-      notifications: []
+      notifications: [],
+      showGoTopButton: false
     };
   },
-  created() {},
+  mounted() {
+    let _this = this;
+    window.onscroll = function(e) {
+      if (
+        window.innerHeight + window.scrollY >=
+          0.95 * document.body.offsetHeight &&
+        document.body.offsetHeight >= 1.25 * window.innerHeight
+      ) {
+        // you're at the bottom of the page
+        _this.showGoTopButton = true;
+        console.log("Bottom of the page, " + this.showGoTopButton);
+      } else {
+        if (_this.showGoTopButton == true) {
+          _this.showGoTopButton = false;
+        }
+      }
+    };
+  },
   components: {
     appHeader: Header,
     appNotifications: Notifications
@@ -44,6 +68,9 @@ export default {
         this.notifications = this.notifications.filter(n => n != notification);
         clearTimeout(timeout);
       }, NOTIFICATION_TIMEOUT);
+    },
+    scrollUp() {
+      Utils.scrollTopSmooth();
     }
   }
 };
@@ -100,11 +127,15 @@ p {
 }
 
 .mt-3 {
-  margin-top: 3rem;
+  margin: 3rem 0 0 0;
+}
+
+.mt-2 {
+  margin: 2rem 0 0 0;
 }
 
 .mb-3 {
-  margin-bottom: 3rem;
+  margin: 0 0 3rem 0;
 }
 
 .my-1 {
@@ -441,5 +472,27 @@ select.error {
 
 .error-message {
   color: lightcoral;
+}
+
+.gotop {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  background: #f9dc5c;
+  color: rgba(0, 0, 0, 0.25);
+  content: "Go top";
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+
+.gotop:hover {
+  transform: translateY(-5px);
 }
 </style>

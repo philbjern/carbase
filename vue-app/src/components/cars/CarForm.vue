@@ -3,6 +3,9 @@
     <div class="form-wrapper">
       <h1 v-if="this.$route.params.id">Edit Car Info</h1>
       <h1 v-else>Add New Car</h1>
+      <button class="btn btn-primary mt-1" @click="rerouteToCarList">
+        Go back
+      </button>
       <form class="form">
         <div class="row">
           <h2 class="mb-1">Manufacturer</h2>
@@ -132,7 +135,7 @@
 </template>
 
 <script>
-import { getNotification } from "../../utils";
+import { getNotification, scrollTop } from "../../utils";
 
 export default {
   data() {
@@ -148,6 +151,7 @@ export default {
     };
   },
   created() {
+    scrollTop();
     if (this.$route.params.id) {
       this.fetchCarData();
     } else {

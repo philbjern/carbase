@@ -3,6 +3,9 @@
     <div class="form-wrapper">
       <h1 v-if="this.$route.params.id">Edit Person Profile</h1>
       <h1 v-else>Add New Person</h1>
+      <button class="btn btn-primary mt-1" @click="rerouteToPersonList">
+        Go back
+      </button>
       <form class="form">
         <div class="row">
           <h2 class="mb-1">First Name</h2>
@@ -118,7 +121,7 @@
 
 <script>
 //TODO: change to actually use vuelidate
-import { contains, getNotification } from "../../utils";
+import { contains, getNotification, scrollTop } from "../../utils";
 
 export default {
   data() {
@@ -152,6 +155,7 @@ export default {
       this.person = { firstName: "", lastName: "", email: "", carsList: [] };
     }
     this.fetchAllCars();
+    scrollTop();
   },
   methods: {
     fetchPersonData() {
@@ -227,6 +231,10 @@ export default {
       }
       return true;
     },
+    isValidaEmail(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email).toLowerCase());
+    },
     validate() {
       this.validation = [];
       this.clearValidationMessages();
@@ -241,6 +249,10 @@ export default {
       if (this.person.email === "") {
         this.validation.push("email");
         this.validationMessages.email.push("Email is required");
+      }
+      if (!this.isValidaEmail(this.person.email)) {
+        this.validation.push("email");
+        this.validationMessages.email.push("Please enter valid email address");
       }
 
       console.log("isFormValid: " + this.isFormValid());

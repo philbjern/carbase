@@ -5,7 +5,7 @@
     <router-link to="persons/new">
       <button class="btn">Add New Person</button>
     </router-link>
-    <div v-if="personArr.length != 0">
+    <div class="cards-container" v-if="personArr.length != 0">
       <app-person-card
         v-for="(person, i) in personArr"
         :key="i"
@@ -75,4 +75,9 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+</style>

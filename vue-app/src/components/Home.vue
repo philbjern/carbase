@@ -1,12 +1,23 @@
 <template>
   <div class="container content-wrapper">
-    <!-- <h1>Welcome to Carbase</h1>
-    <p>
-      Choose persons to see table of car users, or cars to see list of all cars
-      available for rent.
-    </p> -->
+    <div class="jumbotron">
+      <div class="jumbotron-content">
+        <h1>Welcome to Carbase</h1>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce sed
+          faucibus sem. Mauris quis neque vestibulum, ullamcorper enim nec,
+          ornare ligula. Vestibulum convallis elit ac tortor ullamcorper
+          lacinia. Sed facilisis nibh enim, at commodo dolor pharetra at.
+          Vivamus a metus euismod, molestie risus sed, scelerisque eros.
+          Suspendisse potenti. Morbi aliquam viverra risus mollis accumsan.
+          Pellentesque sit amet dignissim nisl, eget lacinia ligula. Nunc
+          euismod pulvinar lobortis.
+        </p>
+        <button class="btn btn-primary">Learn more</button>
+      </div>
+    </div>
 
-    <div class="cards">
+    <div class="cards mt-2">
       <router-link to="/persons" tag="div" class="card">
         <div class="bg-icon">
           <i class="fa fa-user"></i>
@@ -144,5 +155,27 @@ export default {};
   margin: 2rem 4rem;
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.jumbotron {
+  background-image: url("../../static/img/cars.jpg");
+  background-size: cover;
+  backdrop-filter: grayscale(0.5);
+  background-blend-mode: saturation;
+  height: 550px;
+  position: relative;
+  border-radius: 10px;
+}
+
+.jumbotron-content {
+  position: absolute;
+  backdrop-filter: blur(4px);
+  bottom: 30px;
+  left: 30px;
+  max-width: 70%;
+  color: rgba(0, 0, 0, 0.75);
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.45);
+  border-radius: 5px;
 }
 </style>

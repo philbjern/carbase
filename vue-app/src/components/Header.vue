@@ -7,6 +7,8 @@
         <router-link to="/" tag="li" exact>Home</router-link>
         <router-link to="/persons" tag="li">Persons</router-link>
         <router-link to="/cars" tag="li">Cars</router-link>
+        <li>Login</li>
+        <li>Register</li>
       </ul>
     </div>
   </div>
@@ -54,7 +56,7 @@ export default {};
 }
 
 .nav li:hover {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.08);
   color: #ed254e;
   cursor: pointer;
 }
