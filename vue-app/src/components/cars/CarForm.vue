@@ -6,7 +6,7 @@
       <button class="btn btn-primary mt-1" @click="rerouteToCarList">
         Go back
       </button>
-      <form class="form">
+      <form class="form mt-3">
         <div class="row">
           <h2 class="mb-1">Manufacturer</h2>
           <input

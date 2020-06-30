@@ -23,7 +23,7 @@
 <script>
 import PersonCard from "./PersonCard.vue";
 
-import { getNotification } from "../../utils";
+import { getNotification, Utils } from "../../utils";
 
 export default {
   data() {
@@ -69,8 +69,10 @@ export default {
     }
   },
   created() {
-    // fetch data
     this.fetchData();
+  },
+  mounted() {
+    Utils.scrollTop();
   }
 };
 </script>

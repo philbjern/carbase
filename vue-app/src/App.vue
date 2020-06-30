@@ -45,7 +45,6 @@ export default {
       ) {
         // you're at the bottom of the page
         _this.showGoTopButton = true;
-        console.log("Bottom of the page, " + this.showGoTopButton);
       } else {
         if (_this.showGoTopButton == true) {
           _this.showGoTopButton = false;
@@ -445,10 +444,6 @@ a {
   min-width: 600px;
 }
 
-.form {
-  margin-top: 3em;
-}
-
 .form h2 {
   font-family: Roboto, sans-serif;
   font-size: 1.1rem;
@@ -494,5 +489,9 @@ select.error {
 
 .gotop:hover {
   transform: translateY(-5px);
+}
+
+.width-full {
+  width: 100%;
 }
 </style>

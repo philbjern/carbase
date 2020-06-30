@@ -6,7 +6,7 @@
       <button class="btn btn-primary mt-1" @click="rerouteToPersonList">
         Go back
       </button>
-      <form class="form">
+      <form class="form mt-3">
         <div class="row">
           <h2 class="mb-1">First Name</h2>
           <input
@@ -140,9 +140,11 @@ export default {
   computed: {
     availableCars() {
       let result = [];
-      for (let car of this.cars) {
-        if (!contains(this.person.carsList, car.id)) {
-          result.push(car);
+      if (this.person.carsList !== undefined) {
+        for (let car of this.cars) {
+          if (!contains(this.person.carsList, car.id)) {
+            result.push(car);
+          }
         }
       }
       return result;
@@ -231,7 +233,7 @@ export default {
       }
       return true;
     },
-    isValidaEmail(email) {
+    isValidEmail(email) {
       const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       return re.test(String(email).toLowerCase());
     },
@@ -250,12 +252,11 @@ export default {
         this.validation.push("email");
         this.validationMessages.email.push("Email is required");
       }
-      if (!this.isValidaEmail(this.person.email)) {
+      if (!this.isValidEmail(this.person.email)) {
         this.validation.push("email");
         this.validationMessages.email.push("Please enter valid email address");
       }
 
-      console.log("isFormValid: " + this.isFormValid());
       return this.isFormValid();
     },
     editPerson() {

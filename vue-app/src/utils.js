@@ -28,5 +28,9 @@ export function scrollTopSmooth() {
 export const Utils = {
   scrollTopSmooth: () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  },
+  scrollTop: () => {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
   }
 };

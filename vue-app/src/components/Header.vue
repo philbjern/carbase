@@ -7,7 +7,7 @@
         <router-link to="/" tag="li" exact>Home</router-link>
         <router-link to="/persons" tag="li">Persons</router-link>
         <router-link to="/cars" tag="li">Cars</router-link>
-        <li>Login</li>
+        <router-link to="/login" tag="li">Login</router-link>
         <li>Register</li>
       </ul>
     </div>

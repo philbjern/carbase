@@ -28,9 +28,9 @@
           <td>{{ car.engineVolume }}L</td>
 
           <td>
-            <button class="btn" @click="editCar(car.id)">Edit Car</button>
+            <button class="btn" @click="editCar(car.id)">Edit</button>
             <button class="btn" @click="confirmCarDelete(car.id)">
-              Delete Car
+              Delete
             </button>
           </td>
         </tr>

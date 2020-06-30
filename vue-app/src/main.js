@@ -1,10 +1,11 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import VueResource from "vue-resource";
+import VModal from "vue-js-modal";
+
 import App from "./App.vue";
 import { routes } from "./routes";
 import { config } from "./config";
-import VModal from "vue-js-modal";
 
 Vue.use(VueRouter);
 const router = new VueRouter({
