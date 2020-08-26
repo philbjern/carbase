@@ -1,0 +1,61 @@
+version: '3'
+services:
+  api-gateway:
+    image: pl.carsoft.carbase/carbase-api-gateway:0.0.1-SNAPSHOT
+    ports:
+      - 8080:8080
+
+  car-service:
+    image: pl.carsoft.carbase/carbase-car-service:0.0.1-SNAPSHOT
+    ports:
+      - 8082:8082
+    depends_on:
+      - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://carbase-db:3306/cardb?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: carbaseadmin
+      SPRING_DATASOURCE_PASSWORD: carbaseadmin
+    networks:
+      - carbase-mysql
+
+  person-service:
+    image: pl.carsoft.carbase/carbase-person-service:0.0.1-SNAPSHOT
+    ports:
+      - 8081:8081
+    depends_on:
+      - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://carbase-db:3306/persondb?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: carbaseadmin
+      SPRING_DATASOURCE_PASSWORD: carbaseadmin
+    networks:
+      - carbase-mysql
+
+  carsharing-service:
+    image: pl.carsoft.carbase/carbase-carsharing-service:0.0.1-SNAPSHOT
+    ports:
+      - 8083:8083
+    depends_on:
+      - mysqldb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://carbase-db:3306/carsharingdb?allowPublicKeyRetrieval=true&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: carbaseadmin
+      SPRING_DATASOURCE_PASSWORD: carbaseadmin
+    networks:
+      - carbase-mysql
+
+  mysqldb:
+    image: mysql:8
+    container_name: carbase-db
+    restart: always
+    networks:
+      - carbase-mysql
+    environment:
+      MYSQL_USER: carbaseadmin
+      MYSQL_PASSWORD: carbaseadmin
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d
+
+networks:
+  carbase-mysql:
