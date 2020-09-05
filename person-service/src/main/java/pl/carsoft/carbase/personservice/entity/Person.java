@@ -1,9 +1,11 @@
 package pl.carsoft.carbase.personservice.entity;
 
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
@@ -20,17 +22,16 @@ public class Person {
     private String email;
 
     @CreationTimestamp
-    @CreatedDate
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date registeredOn;  // rename to registrationDate
+    private Date registrationDate;  // rename to registrationDate
 
-    public Person() {}
+    public Person() {
+    }
 
-    public Person(String firstName, String lastName, String email, Date registeredOn) {
+    public Person(String firstName, String lastName, String email, Date registrationDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.registeredOn = registeredOn;
+        this.registrationDate = registrationDate;
     }
 
     public Long getId() {
@@ -65,12 +66,12 @@ public class Person {
         this.email = email;
     }
 
-    public Date getRegisteredOn() {
-        return registeredOn;
+    public Date getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegisteredOn(Date registeredOn) {
-        this.registeredOn = registeredOn;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     @Override
@@ -80,7 +81,7 @@ public class Person {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", registeredOn=" + registeredOn +
+                ", registeredOn=" + registrationDate +
                 '}';
     }
 

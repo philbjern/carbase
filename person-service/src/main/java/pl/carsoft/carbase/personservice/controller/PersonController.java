@@ -8,11 +8,12 @@ import pl.carsoft.carbase.personservice.entity.Person;
 import pl.carsoft.carbase.personservice.repository.PersonRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/persons")
-
+@CrossOrigin(origins = "http://localhost")
 public class PersonController {
 
     @Autowired
@@ -32,7 +33,7 @@ public class PersonController {
         if (person != null) {
             return new ResponseEntity<>(person, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.NOT_FOUND);
         }
     }
 
