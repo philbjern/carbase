@@ -178,4 +178,16 @@ export default {};
   background: rgba(255, 255, 255, 0.45);
   border-radius: 5px;
 }
+
+@media screen and (max-width: 900px) {
+  .cards {
+    display: block;
+    max-width: 80%;
+    margin: auto;
+  }
+
+  .narrow {
+    padding: 0;
+  }
+}
 </style>

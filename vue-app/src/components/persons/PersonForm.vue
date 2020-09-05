@@ -122,6 +122,7 @@
 <script>
 //TODO: change to actually use vuelidate
 import { contains, getNotification, scrollTop } from "../../utils";
+import { Services } from "../../services";
 
 export default {
   data() {
@@ -161,7 +162,8 @@ export default {
   },
   methods: {
     fetchPersonData() {
-      const url = `persons/${this.$route.params.id}`;
+      const url = `${Services.APIGATEWAY_SERVICE_URL}/persons/${this.$route.params.id}`;
+      console.log(url);
       this.$http
         .get(url)
         .then(response => response.json())
@@ -178,7 +180,7 @@ export default {
     },
     fetchAllCars() {
       this.$http
-        .get("cars")
+        .get(Services.APIGATEWAY_SERVICE_URL + "/cars")
         .then(response => response.json())
         .then(
           data => (this.cars = data),
@@ -261,7 +263,7 @@ export default {
     },
     editPerson() {
       if (this.validate()) {
-        const url = `persons/${this.person.id}`;
+        const url = `${Services.APIGATEWAY_SERVICE_URL}/persons/${this.person.id}`;
         this.$http.put(url, this.person).then(
           success => {
             this.$emit(
@@ -281,21 +283,23 @@ export default {
     },
     addPerson() {
       if (this.validate()) {
-        this.$http.post("persons", this.person).then(
-          success => {
-            this.$emit(
-              "notify",
-              getNotification("success", "Sucessfully added new person")
-            );
-            this.rerouteToPersonList();
-          },
-          error => {
-            this.$emit(
-              "notify",
-              getNotification("error", "Error while adding new person")
-            );
-          }
-        );
+        this.$http
+          .post(`${Services.APIGATEWAY_SERVICE_URL}/persons`, this.person)
+          .then(
+            success => {
+              this.$emit(
+                "notify",
+                getNotification("success", "Sucessfully added new person")
+              );
+              this.rerouteToPersonList();
+            },
+            error => {
+              this.$emit(
+                "notify",
+                getNotification("error", "Error while adding new person")
+              );
+            }
+          );
       }
     },
     rerouteToPersonList() {

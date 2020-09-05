@@ -1,7 +1,9 @@
 <template>
   <div class="row bg-white">
     <div class="container navbar">
-      <h1 class="title">Carbase</h1>
+      <h1 class="title">
+        Carbase
+      </h1>
       <!-- <i class="fa fa-car"></i> -->
       <ul class="nav">
         <router-link to="/" tag="li" exact>Home</router-link>
