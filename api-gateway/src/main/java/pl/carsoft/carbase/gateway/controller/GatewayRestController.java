@@ -3,6 +3,7 @@ package pl.carsoft.carbase.gateway.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api")
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = {"http://localhost:8080", "http://127.0.0.1:8080"})
 public class GatewayRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRestController.class);
@@ -55,6 +56,7 @@ public class GatewayRestController {
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (RestClientException e) {
             LOGGER.info("Cannot reach service, " + e.getMessage());
+            e.printStackTrace();
             return new ResponseEntity<>(Collections.emptyList(), HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
