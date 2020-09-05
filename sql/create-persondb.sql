@@ -10,6 +10,6 @@ CREATE TABLE `person` (
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `registered_on` varchar(20) DEFAULT NULL,
+  `registration_date` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
