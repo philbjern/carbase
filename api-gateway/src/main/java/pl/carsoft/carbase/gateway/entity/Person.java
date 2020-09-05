@@ -14,17 +14,17 @@ public class Person {
 
     private String email;
 
-    private Date registeredOn;
+    private Date registrationDate;
 
     private List<Car> carsList;
 
     public Person() {}
 
-    public Person(String firstName, String lastName, String email, Date registeredOn) {
+    public Person(String firstName, String lastName, String email, Date registrationDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.registeredOn = registeredOn;
+        this.registrationDate = registrationDate;
     }
 
 //    public Person(String firstName, String lastName, String email) {
@@ -63,12 +63,12 @@ public class Person {
         this.email = email;
     }
 
-    public Date getRegisteredOn() {
-        return registeredOn;
+    public Date getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setRegisteredOn(Date registeredOn) {
-        this.registeredOn = registeredOn;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public List<Car> getCarsList() {
@@ -99,7 +99,7 @@ public class Person {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
-                ", registeredOn=" + registeredOn +
+                ", registeredOn=" + registrationDate +
                 ", carsList=" + carsList +
                 '}';
     }
@@ -112,12 +112,12 @@ public class Person {
         return Objects.equals(firstName, person.firstName) &&
                 Objects.equals(lastName, person.lastName) &&
                 Objects.equals(email, person.email) &&
-                Objects.equals(registeredOn, person.registeredOn);
+                Objects.equals(registrationDate, person.registrationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(firstName, lastName, email, registeredOn);
+        return Objects.hash(firstName, lastName, email, registrationDate);
     }
 
 }
