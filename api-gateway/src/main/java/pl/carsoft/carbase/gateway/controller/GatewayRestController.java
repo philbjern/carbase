@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api")
-@CrossOrigin(origins = {"http://localhost:8080", "http://127.0.0.1:8080"})
+@CrossOrigin(origins = "http://localhost")
 public class GatewayRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRestController.class);
