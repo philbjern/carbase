@@ -6,14 +6,14 @@ export function getNotification(type, msg) {
 }
 
 export function contains(arr, id) {
-  let contains = false;
+  let isContained = false;
   for (let i = 0; i < arr.length; i++) {
     if (arr[i].id == id) {
-      contains = true;
+      isContained = true;
       break;
     }
   }
-  return contains;
+  return isContained;
 }
 
 export function scrollTop() {
@@ -40,13 +40,13 @@ export const Utils = {
     };
   },
   contains: (arr, id) => {
-    let contains = false;
+    let isContained = false;
     for (let i = 0; i < arr.length; i++) {
       if (arr[i].id == id) {
-        contains = true;
+        isContained = true;
         break;
       }
     }
-    return contains;
+    return isContained;
   }
 };
