@@ -72,17 +72,13 @@ services:
       - carbase-mysql
 
   carbase-vuejs:
-    container_name: carbase-vuejs
-    build: ./vue-app
+    image: pl.carsoft.carbase/carbase-vuejs
+      #container_name: carbase-vuejs
     volumes:
       - "/app"
       - "/app/node_modules"
     ports:
-      - "8080:8080"
-    expose:
-      - "8080"
-    networks:
-      - carbase-mysql
+      - "8080:80"
 
 networks:
   carbase-mysql:
