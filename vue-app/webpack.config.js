@@ -1,6 +1,6 @@
 var path = require("path");
 var webpack = require("webpack");
-
+const { VueLoaderPlugin } = require("vue-loader");
 var HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
@@ -62,19 +62,22 @@ module.exports = {
     extensions: ["*", ".js", ".vue", ".json"]
   },
   devServer: {
+    contentBase: './src',
     historyApiFallback: true,
     noInfo: true,
-    overlay: true
+    overlay: true,
+    inline: true
   },
   performance: {
     hints: false
   },
-  devtool: "#eval-source-map",
+  devtool: "eval-source-map",
   plugins: [
     new HtmlWebpackPlugin({
       title: "Carbase",
       template: "index.html"
-    })
+    }),
+    new VueLoaderPlugin()
   ]
 };
 

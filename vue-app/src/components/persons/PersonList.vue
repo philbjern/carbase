@@ -23,7 +23,7 @@
 <script>
 import PersonCard from "./PersonCard.vue";
 import { getNotification, Utils } from "../../utils";
-import { Services } from "../../services";
+import { Urls } from "../../urls";
 
 export default {
   data() {
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     fetchData() {
-      const url = `${Services.APIGATEWAY_SERVICE_URL}/persons`;
+      const url = `${Urls.APIGATEWAY_SERVICE_URL}/persons`;
       console.log(url);
       this.$http
         .get(url)

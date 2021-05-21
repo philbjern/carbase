@@ -4,7 +4,7 @@
       <div
         class="notification"
         v-for="(notification, i) in notifications"
-        :key="i"
+        :key="notification.type + ' ' + i"
         :class="{
           'notification-error': notification.type == 'error',
           'notification-success': notification.type == 'success',
