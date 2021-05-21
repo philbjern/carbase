@@ -11,6 +11,19 @@
 
     <artifactId>api-gateway</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>
@@ -27,7 +40,7 @@
                     <archive>
                         <manifest>
                             <!-- give full qualified name of your main class-->
-                            <mainClass>pl.carsoft.carbase.gateway.GatewayApplication</mainClass>
+                            <mainClass>pl.carsoft.carbase.gateway.ApiGatewayApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
