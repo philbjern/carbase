@@ -136,6 +136,7 @@
 
 <script>
 import { getNotification, scrollTop } from "../../utils";
+import { Urls } from "../../urls";
 
 export default {
   data() {
@@ -183,7 +184,7 @@ export default {
       return true;
     },
     fetchCarData() {
-      const url = `cars/${this.$route.params.id}`;
+      const url = `${Urls.APIGATEWAY_SERVICE_URL}/api/cars/${this.$route.params.id}`;
       this.$http
         .get(url)
         .then(response => response.json())
@@ -244,7 +245,7 @@ export default {
     },
     editCarPostRequest() {
       if (this.validate()) {
-        const url = `cars/${this.car.id}`;
+        const url = `${Urls.APIGATEWAY_SERVICE_URL}/api/cars/${this.car.id}`;
         this.$http.put("cars", this.car).then(
           success => {
             this.$emit(
@@ -265,22 +266,24 @@ export default {
     },
     newCarPostRequest() {
       if (this.validate()) {
-        this.$http.post("cars", this.car).then(
-          success => {
-            this.$emit(
-              "notify",
-              getNotification("success", "Sucessfully added new car")
-            );
-            scrollTop();
-            this.rerouteToCarList();
-          },
-          error => {
-            this.$emit(
-              "notify",
-              getNotification("error", "Error while adding new car")
-            );
-          }
-        );
+        this.$http
+          .post(`${Urls.APIGATEWAY_SERVICE_URL}/api/cars`, this.car)
+          .then(
+            success => {
+              this.$emit(
+                "notify",
+                getNotification("success", "Sucessfully added new car")
+              );
+              scrollTop();
+              this.rerouteToCarList();
+            },
+            error => {
+              this.$emit(
+                "notify",
+                getNotification("error", "Error while adding new car")
+              );
+            }
+          );
       }
     },
     rerouteToCarList() {
