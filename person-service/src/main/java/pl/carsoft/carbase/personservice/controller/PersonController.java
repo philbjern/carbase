@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/api/persons")
-@CrossOrigin(origins = "http://localhost")
 public class PersonController {
 
     @Autowired
