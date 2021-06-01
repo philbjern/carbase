@@ -62,6 +62,7 @@
 
 <script>
 import { getNotification } from "../../utils";
+import { Urls } from "../../urls";
 
 export default {
   data() {
@@ -73,7 +74,7 @@ export default {
   methods: {
     fetchData() {
       this.$http
-        .get("cars")
+        .get(Urls.APIGATEWAY_SERVICE_URL + "/api/cars")
         .then(response => response.json())
         .then(
           data => (this.carArr = data),
