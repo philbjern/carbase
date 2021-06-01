@@ -162,7 +162,7 @@ export default {
   },
   methods: {
     fetchPersonData() {
-      const url = `${Urls.APIGATEWAY_SERVICE_URL}/persons/${this.$route.params.id}`;
+      const url = `${Urls.APIGATEWAY_SERVICE_URL}/api/persons/${this.$route.params.id}`;
       console.log(url);
       this.$http
         .get(url)
@@ -180,7 +180,7 @@ export default {
     },
     fetchAllCars() {
       this.$http
-        .get(Urls.APIGATEWAY_SERVICE_URL + "/cars")
+        .get(Urls.APIGATEWAY_SERVICE_URL + "/api/cars")
         .then(response => response.json())
         .then(
           data => (this.cars = data),
@@ -263,7 +263,7 @@ export default {
     },
     editPerson() {
       if (this.validate()) {
-        const url = `${Urls.APIGATEWAY_SERVICE_URL}/persons/${this.person.id}`;
+        const url = `${Urls.APIGATEWAY_SERVICE_URL}/api/persons/${this.person.id}`;
         this.$http.put(url, this.person).then(
           success => {
             this.$emit(
@@ -284,7 +284,7 @@ export default {
     addPerson() {
       if (this.validate()) {
         this.$http
-          .post(`${Urls.APIGATEWAY_SERVICE_URL}/persons`, this.person)
+          .post(`${Urls.APIGATEWAY_SERVICE_URL}/api/persons`, this.person)
           .then(
             success => {
               this.$emit(

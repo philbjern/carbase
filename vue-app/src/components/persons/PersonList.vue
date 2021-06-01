@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     fetchData() {
-      const url = `${Urls.APIGATEWAY_SERVICE_URL}/persons`;
+      const url = `${Urls.APIGATEWAY_SERVICE_URL}/api/persons`;
       console.log(url);
       this.$http
         .get(url)
