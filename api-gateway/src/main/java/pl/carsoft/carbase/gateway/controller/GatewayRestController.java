@@ -21,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "api")
-@CrossOrigin(origins = "http://localhost")
+@CrossOrigin(origins = {"http://localhost:8080"})
 public class GatewayRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GatewayRestController.class);
@@ -57,7 +57,7 @@ public class GatewayRestController {
         } catch (RestClientException e) {
             LOGGER.info("Cannot reach service, " + e.getMessage());
             e.printStackTrace();
-            return new ResponseEntity<>(Collections.emptyList(), HttpStatus.SERVICE_UNAVAILABLE);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.SERVICE_UNAVAILABLE);
         }
     }
 
