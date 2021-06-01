@@ -1,5 +1,7 @@
 package pl.carsoft.carbase.gateway.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -17,6 +19,7 @@ public class Car {
 
     private FuelType fuelType;
 
+    @JsonIgnore
     private List<Person> ownerList;
 
     public Car() {}
