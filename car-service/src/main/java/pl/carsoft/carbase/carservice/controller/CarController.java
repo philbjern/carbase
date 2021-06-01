@@ -26,7 +26,7 @@ public class CarController {
         if (car != null) {
             return new ResponseEntity<>(car, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(String.format("Car with id %d not found", carId), HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(path = "", method = RequestMethod.POST)
