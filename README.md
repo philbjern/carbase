@@ -25,3 +25,5 @@ Features:
 * Go to `vue-app` directory and run `npm install` and then `npm run dev` to start developement server
 
 * Navigate to web browser and open `http://localhost:8080` to access application
+
+## Test SSH key
