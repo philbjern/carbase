@@ -26,4 +26,3 @@ Features:
 
 * Navigate to web browser and open `http://localhost:8080` to access application
 
-## Test SSH key
