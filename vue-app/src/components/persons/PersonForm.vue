@@ -15,6 +15,7 @@
             :class="{
               error: this.validationMessages.firstName.length > 0
             }"
+            @blur="validateFirstName"
           />
           <div v-if="this.validationMessages.firstName.length > 0">
             <p
@@ -35,6 +36,7 @@
             :class="{
               error: this.validationMessages.lastName.length > 0
             }"
+            @blur="validateLastName"
           />
           <div v-if="this.validationMessages.lastName.length > 0">
             <p
@@ -55,6 +57,7 @@
             :class="{
               error: this.validationMessages.email.length > 0
             }"
+            @blur="validateEmail"
           />
           <div v-if="this.validationMessages.email.length > 0">
             <p
@@ -242,14 +245,28 @@ export default {
     validate() {
       this.validation = [];
       this.clearValidationMessages();
+
+      this.validateFirstName();
+      this.validateLastName();
+      this.validateEmail();
+      return this.isFormValid();
+    },
+    validateFirstName() {
+      this.validationMessages.firstName = [];
       if (this.person.firstName === "") {
         this.validation.push("firstName");
         this.validationMessages.firstName.push("First name is required");
       }
+    },
+    validateLastName() {
+      this.validationMessages.lastName = [];
       if (this.person.lastName === "") {
         this.validation.push("lastName");
         this.validationMessages.lastName.push("Last name is required");
       }
+    },
+    validateEmail() {
+      this.validationMessages.email = [];
       if (this.person.email === "") {
         this.validation.push("email");
         this.validationMessages.email.push("Email is required");
@@ -258,8 +275,6 @@ export default {
         this.validation.push("email");
         this.validationMessages.email.push("Please enter valid email address");
       }
-
-      return this.isFormValid();
     },
     editPerson() {
       if (this.validate()) {

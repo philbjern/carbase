@@ -15,6 +15,7 @@
             :class="{
               error: this.validationMessages.make.length > 0
             }"
+            @blur="validateManufacturer"
           />
           <div v-if="this.validationMessages.make.length > 0">
             <p
@@ -35,6 +36,7 @@
             :class="{
               error: this.validationMessages.model.length > 0
             }"
+            @blur="validateModel"
           />
           <div v-if="this.validationMessages.model.length > 0">
             <p
@@ -55,6 +57,7 @@
             :class="{
               error: this.validationMessages.productionYear.length > 0
             }"
+            @blur="validateProductionYear"
           />
           <div v-if="this.validationMessages.productionYear.length > 0">
             <p
@@ -74,6 +77,7 @@
             :class="{
               error: this.validationMessages.fuel.length > 0
             }"
+            @blur="validateFuelType"
           >
             <option value="0">Select fuel type</option>
             <option value="DIESEL">Diesel</option>
@@ -101,6 +105,7 @@
             :class="{
               error: this.validationMessages.engineVolume.length > 0
             }"
+            @blur="validateEngineVolume"
           />
           <div v-if="this.validationMessages.engineVolume.length > 0">
             <p
@@ -201,12 +206,29 @@ export default {
     },
     validate() {
       this.clearValidationMessages();
+
+      this.validateManufacturer();
+      this.validateModel();
+      this.validateProductionYear();
+      this.validateFuelType();
+      this.validateEngineVolume();
+
+      return this.isFormValid(this.validationMessages);
+    },
+    validateManufacturer() {
+      this.validationMessages.make = [];
       if (this.car.make === "") {
         this.validationMessages.make.push("This field is required");
       }
+    },
+    validateModel() {
+      this.validationMessages.model = [];
       if (this.car.model === "") {
         this.validationMessages.model.push("This field is required");
       }
+    },
+    validateProductionYear() {
+      this.validationMessages.productionYear = [];
       if (this.car.productionYear === "") {
         this.validationMessages.productionYear.push("This field is required");
       } else {
@@ -225,10 +247,15 @@ export default {
           }
         }
       }
-
+    },
+    validateFuelType() {
+      this.validationMessages.fuel = [];
       if (this.car.fuelType == "0") {
         this.validationMessages.fuel.push("This field is required");
       }
+    },
+    validateEngineVolume() {
+      this.validationMessages.engineVolume = [];
       if (this.car.engineVolume === "") {
         this.validationMessages.engineVolume.push("This field is required");
       } else {
@@ -240,8 +267,6 @@ export default {
           );
         }
       }
-
-      return this.isFormValid(this.validationMessages);
     },
     editCarPostRequest() {
       if (this.validate()) {
