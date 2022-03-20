@@ -14,15 +14,3 @@ Features:
 * Adding new users and cars
 
 * Deleting users and cars
-
-## Installation
-* Clone repository `git clone https://github.com/fbiernat/carbase.git`
-
-* Setup MySQL database by running SQL scripts in `sql` folder
-
-* Open project in IDE, and run `PersonServiceApplication.java`, `CarServiceApplication.java`, `CarSharingApplication.java` and `GatewayApplication.java`
-
-* Go to `vue-app` directory and run `npm install` and then `npm run dev` to start developement server
-
-* Navigate to web browser and open `http://localhost:8080` to access application
-
